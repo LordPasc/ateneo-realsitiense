@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ateneo Realsitiense</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: url('fondo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            height: 100vh;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        .creators {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 10px;
+        }
+
+        .creator {
+            display: flex;
+            align-items: flex-start;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .creator img {
+            width: 80px;
+            margin-right: 10px;
+        }
+
+        #calendar {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            width: 10cm;
+            height: 7cm;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        #days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-top: 5px;
+        }
+
+        #days-grid div {
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+            font-size: 0.8em;
+        }
+
+        #days-grid div:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        #activities {
+            width: 200px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            margin-left: 10px;
+            box-sizing: border-box;
+        }
+
+        #activities h3 {
+            text-align: left;
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        #activities-list {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+            font-size: 0.9em;
+        }
+
+        .bottom-container {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            max-width: 600px;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ateneo Realsitiense</h1>
+
+    <div class="creators">
+        <div class="creator">
+            <img src="foto_creador1.jpg" alt="Creador 1">
+            <div>
+                <h3>Nombre del Creador 1</h3>
+                <p>Texto de presentación de la persona 1. Aquí puedes detallar la biografía, intereses y logros culturales de esta persona.</p>
+            </div>
+        </div>
+        <div class="creator">
+            <img src="foto_creador2.jpg" alt="Creador 2">
+            <div>
+                <h3>Nombre del Creador 2</h3>
+                <p>Texto de presentación de la persona 2. Aquí puedes detallar la biografía, intereses y logros culturales de esta persona.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-container">
+        <div id="calendar">
+            <button id="prev-month">&laquo; Anterior</button>
+            <span id="current-month">Mayo 2024</span>
+            <button id="next-month">Siguiente &raquo;</button>
+            <div id="days-grid">
+                <!-- Aquí se insertarán los días del mes mediante JavaScript -->
+            </div>
+        </div>
+
+        <div id="activities">
+            <h3>Actividades</h3>
+            <ul id="activities-list">
+                <!-- Aquí se insertarán las actividades mediante JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const daysGrid = document.getElementById('days-grid');
+        const currentMonth = document.getElementById('current-month');
+        let date = new Date();
+
+        function loadCalendar() {
+            daysGrid.innerHTML = '';
+            currentMonth.textContent = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+            const lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+            
+            for (let i = 0; i < firstDay; i++) {
+                daysGrid.innerHTML += '<div></div>';
+            }
+            
+            for (let i = 1; i <= lastDate; i++) {
+                const day = document.createElement('div');
+                day.textContent = i;
+                day.style.cursor = 'pointer';
+                day.onclick = function() {
+                    highlightDay(i);
+                    // loadActivities(i);
+                };
+                daysGrid.appendChild(day);
+            }
+        }
+
+        function highlightDay(day) {
+            Array.from(daysGrid.children).forEach(child => {
+                child.style.backgroundColor = '';
+                child.style.fontWeight = '';
+            });
+            const selectedDay = daysGrid.children[day - 1 + new Date(date.getFullYear(), date.getMonth(), 1).getDay()];
+            selectedDay.style.backgroundColor = '#f0f0f0';
+            selectedDay.style.fontWeight = 'bold';
+        }
+
+        document.getElementById('prev-month').onclick = function() {
+            date.setMonth(date.getMonth() - 1);
+            loadCalendar();
+        };
+
+        document.getElementById('next-month').onclick = function() {
+            date.setMonth(date.getMonth() + 1);
+            loadCalendar();
+        };
+
+        loadCalendar();
+    </script>
+
+</body>
+</html>
