@@ -1,101 +1,168 @@
-from pathlib import Path
 
-# Ruta donde se guardará el archivo
-file_path = Path("/mnt/data/index.html")
-
-# Contenido del archivo HTML
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ateneo Realsitiense</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
+    :root {
+      --color-primario: #2c3e50;
+      --color-secundario: #ecf0f1;
+      --color-acento: #c0392b;
+    }
     body {
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      font-family: 'Georgia', serif;
-      background: linear-gradient(to right, #56ccf2, #a3d56b, #f7e358);
-      color: #2c2c2c;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      padding: 0;
+      color: var(--color-primario);
+      background: var(--color-secundario);
     }
     header {
+      background: var(--color-primario);
+      color: #fff;
+      padding: 1em;
       text-align: center;
-      padding: 2rem;
     }
-    header img {
-      width: 180px;
-      margin-bottom: 1rem;
-    }
-    header h1 {
-      font-size: 2.5rem;
-      margin: 0;
-    }
-    header h2 {
-      font-size: 1.8rem;
-      margin: 0.5rem 0 1rem;
-    }
-    .subtext {
-      letter-spacing: 2px;
-      font-size: 0.9rem;
-    }
-    .buttons {
+    .header-logo {
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      padding: 0 2rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1em;
     }
-    .buttons a {
-      margin: 0.5rem 0;
-      padding: 0.7rem 1.5rem;
+    .header-logo img {
+      height: 80px;
+      width: auto;
+    }
+    nav {
+      margin-top: 0.5em;
+    }
+    nav a {
+      margin: 0 0.7em;
+      color: #fff;
       text-decoration: none;
-      border: 1px solid #2c2c2c;
-      color: #2c2c2c;
-      background-color: rgba(255,255,255,0.2);
       font-weight: bold;
-      text-align: center;
-      transition: background 0.3s;
     }
-    .buttons a:hover {
-      background-color: rgba(0, 0, 0, 0.1);
+    nav a:hover {
+      color: var(--color-acento);
     }
-    footer {
-      margin-top: auto;
-      text-align: center;
-      padding: 1rem;
+    main {
+      padding: 2em 1em;
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border-radius: 6px;
     }
-    footer img {
-      height: 30px;
-      margin: 0 0.5rem;
+    section {
+      margin-bottom: 2.5em;
+    }
+    h1, h2, h3 {
+      font-family: Georgia, serif;
+    }
+    h2 {
+      border-bottom: 2px solid var(--color-acento);
+      padding-bottom: 0.3em;
+      color: var(--color-primario);
+    }
+    .calendar, .archive {
+      list-style: none;
+      padding: 0;
+    }
+    .calendar li, .archive li {
+      margin: 0.5em 0;
+    }
+    .board ul {
+      list-style: none;
+      padding: 0;
+    }
+    .board li {
+      margin: 0.3em 0;
+    }
+    a.button {
+      display: inline-block;
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      background: var(--color-acento);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    a.button:hover {
+      background: #96281b;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://static.canva.com/web/images/e846d5a34b9ed1b6d79b5a2eeae28347.png" alt="Logo Ateneo">
-    <h1>ATENEO REALSITIENSE</h1>
-    <h2>San Fernando de Henares</h2>
-    <div class="subtext">ENCUENTROS Y EVENTOS CULTURALES<br>EN EL REAL SITIO</div>
-  </header>
 
-  <div class="buttons">
-    <a href="#">CALENDARIO</a>
-    <a href="#">ESTATUTOS</a>
-    <a href="#">Acerca de nosotros</a>
-    <a href="#">CONTACTO</a>
+<header>
+  <div class="header-logo">
+    <img src="logo.jpg" alt="Logo Ateneo Realsitiense">
+    <h1>Ateneo Realsitiense</h1>
   </div>
+  <nav>
+    <a href="#tertulias">Tertulias</a>
+    <a href="#nosotros">Quiénes somos</a>
+    <a href="#noticias">Noticias</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
 
-  <footer>
-    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
-    <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter">
-    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
-  </footer>
+<main>
+  <section id="hero">
+    <h2>Próxima tertulia</h2>
+    <p><strong>"La palabra poética"</strong><br>Fecha: 15 de septiembre de 2025 · Moderadora: María López</p>
+    <a href="#tertulias" class="button">Ver calendario completo</a>
+  </section>
+
+  <section id="tertulias">
+    <h2>Programa de tertulias</h2>
+    <ul class="calendar">
+      <li>Miércoles 15 Sep · La palabra poética · Moderadora: M. López</li>
+      <li>Miércoles 29 Sep · Literatura de viaje · Moderador: J. Pérez</li>
+    </ul>
+    <h3>Archivo de sesiones pasadas</h3>
+    <ul class="archive">
+      <li>Julio 2025 · "Microficción contemporánea" · Reseña breve</li>
+      <li>Junio 2025 · "Poesía visual" · Reseña breve</li>
+    </ul>
+  </section>
+
+  <section id="nosotros">
+    <h2>Quiénes somos</h2>
+    <div class="board">
+      <ul>
+        <li><strong>Presidentes:</strong> José Tomás Castillo y Rafael Luis Gómez</li>
+        <li><strong>Secretaria:</strong> Ana Ruiz</li>
+        <li><strong>Tesorero:</strong> Luis Martínez</li>
+      </ul>
+    </div>
+    <h3>Estatutos</h3>
+    <p><a href="estatutos.pdf" target="_blank">Descarga los estatutos (PDF)</a></p>
+  </section>
+
+  <section id="noticias">
+    <h2>Noticias y boletín</h2>
+    <article>
+      <h3>Convocatoria para nuevos socios</h3>
+      <p>Publicado: 1 Julio 2025</p>
+      <p>Únete a nosotros y participa en nuestras tertulias literarias.</p>
+    </article>
+    <a href="#contacto" class="button">Suscribirse al boletín</a>
+  </section>
+
+  <section id="contacto">
+    <h2>Contacto y socio</h2>
+    <p>Formulario de contacto aquí o escríbenos a <a href="mailto:info@ateneorealsitiense.es">info@ateneorealsitiense.es</a></p>
+    <h3>Hazte socio</h3>
+    <p>Cuota anual: 30 €. Incluye acceso a tertulias, archivo y boletines.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Ateneo Realsitiense – ©2025 – Aviso legal y política de privacidad</p>
+</footer>
+
 </body>
 </html>
-"""
-
-# Escribir el archivo
-file_path.write_text(html_content, encoding='utf-8')
-
-file_path.name
