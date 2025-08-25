@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario de Tertulias 2025</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --color-primario: #2c3e50;
+      --color-secundario: #ecf0f1;
+      --color-acento: #c0392b;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: var(--color-primario);
+      background: var(--color-secundario);
+    }
+    h1, h2 {
+      font-family: Georgia, serif;
+      margin: 0 0 10px 0;
+    }
+    h1 {
+      margin-bottom: 5px;
+    }
+    h2 {
+      margin-top: 24px;
+      border-bottom: 2px solid var(--color-acento);
+      padding-bottom: 6px;
+    }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { margin: 8px 0; }
+    a { color: var(--color-acento); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Calendarios */
+    .month { background: #fff; padding: 16px; border-radius: 6px; box-shadow: 0 0 10px rgba(0,0,0,0.05); margin-top: 14px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #d9d9d9; padding: 10px; text-align: center; vertical-align: middle; }
+    th { background: #f4f6f8; font-weight: 600; }
+    td.empty { background: #fafafa; }
+    .tertulia { background: #fde7df; font-weight: 700; }
+    .tertulia a { color: #000; text-decoration: none; display: block; }
+  </style>
+</head>
+<body>
+
+  <h1>Calendario de Tertulias 2025</h1>
+  <p>Aquí se muestran todas las tertulias celebradas y programadas para el año en curso.</p>
+
+  <!-- Listado cronológico -->
+  <h2>Listado de tertulias 2025</h2>
+  <ul>
+    <li>Viernes 12 Sep 2025 · <a href="42.jpg" target="_blank" rel="noopener noreferrer">Periodismo y literatura: género y estilo</a></li>
+    <li>Jueves 02 Oct 2025 · <a href="43.jpg" target="_blank" rel="noopener noreferrer">Asociación Cultural Océanos de Tinta</a></li>
+  </ul>
+
+  <!-- Calendario visual: Septiembre 2025 -->
+  <div class="month">
+    <h2>Septiembre 2025</h2>
+    <table aria-label="Calendario Septiembre 2025">
+      <tr>
+        <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
+      </tr>
+      <tr>
+        <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td>
+      </tr>
+      <tr>
+        <td>8</td><td>9</td><td>10</td><td>11</td>
+        <td class="tertulia"><a href="42.jpg" target="_blank" rel="noopener noreferrer">12</a></td>
+        <td>13</td><td>14</td>
+      </tr>
+      <tr>
+        <td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td>
+      </tr>
+      <tr>
+        <td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td>
+      </tr>
+      <tr>
+        <td>29</td><td>30</td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Calendario visual: Octubre 2025 -->
+  <div class="month">
+    <h2>Octubre 2025</h2>
+    <table aria-label="Calendario Octubre 2025">
+      <tr>
+        <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
+      </tr>
+      <tr>
+        <td class="empty"></td><td class="empty"></td><td>1</td>
+        <td class="tertulia"><a href="43.jpg" target="_blank" rel="noopener noreferrer">2</a></td>
+        <td>3</td><td>4</td><td>5</td>
+      </tr>
+      <tr>
+        <td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td>
+      </tr>
+      <tr>
+        <td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td>
+      </tr>
+      <tr>
+        <td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td>
+      </tr>
+      <tr>
+        <td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td class="empty"></td><td class="empty"></td>
+      </tr>
+    </table>
+  </div>
+
+</body>
+</html>
