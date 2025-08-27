@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galería fotográfica de la XLII Tertulia</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0; padding: 20px;
+      background: #fafafa;
+      color: #2c3e50;
+    }
+    h1 {
+      font-family: Georgia, serif;
+      color: #c0392b;
+      margin-bottom: 20px;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 6px;
+    }
+    .lightbox:target {
+      display: flex;
+    }
+    .close {
+      position: absolute;
+      top: 20px; right: 40px;
+      color: #fff;
+      font-size: 30px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .close:hover {
+      color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Galería fotográfica de la XLII Tertulia</h1>
+
+<div class="gallery">
+  <a href="#img1"><img src="img/42_1.jpg" alt="Foto 1"></a>
+  <a href="#img2"><img src="img/42_2.jpg" alt="Foto 2"></a>
+  <a href="#img3"><img src="img/42_3.jpg" alt="Foto 3"></a>
+  <a href="#img4"><img src="img/42_4.jpg" alt="Foto 4"></a>
+  <a href="#img5"><img src="img/42_5.jpg" alt="Foto 5"></a>
+</div>
+
+<div id="img1" class="lightbox">
+  <a href="#" class="close">&times;</a>
+  <img src="img/42_1.jpg" alt="Foto 1">
+</div>
+<div id="img2" class="lightbox">
+  <a href="#" class="close">&times;</a>
+  <img src="img/42_2.jpg" alt="Foto 2">
+</div>
+<div id="img3" class="lightbox">
+  <a href="#" class="close">&times;</a>
+  <img src="img/42_3.jpg" alt="Foto 3">
+</div>
+<div id="img4" class="lightbox">
+  <a href="#" class="close">&times;</a>
+  <img src="img/42_4.jpg" alt="Foto 4">
+</div>
+<div id="img5" class="lightbox">
+  <a href="#" class="close">&times;</a>
+  <img src="img/42_5.jpg" alt="Foto 5">
+</div>
+
+</body>
+</html>
