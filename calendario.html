@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Calendario de Tertulias 2025</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
       --color-primario: #2c3e50;
@@ -33,13 +33,77 @@
     li { margin: 8px 0; }
     a { color: var(--color-acento); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .month { background: #fff; padding: 16px; border-radius: 6px; box-shadow: 0 0 10px rgba(0,0,0,0.05); margin-top: 14px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #d9d9d9; padding: 10px; text-align: center; vertical-align: middle; }
-    th { background: #f4f6f8; font-weight: 600; }
-    td.empty { background: #fafafa; }
-    .tertulia { background: #fde7df; font-weight: bold; }
-    .tertulia a { color: #000; text-decoration: none; display: block; }
+    .month {
+      background: #fff;
+      padding: 16px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      margin-top: 14px;
+      overflow-x: auto; /* permite scroll horizontal en móviles */
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+      min-width: 320px; /* ancho mínima para evitar colapso columnas */
+      table-layout: fixed; /* distribución equitativa */
+    }
+    th, td {
+      border: 1px solid #d9d9d9;
+      padding: 8px 6px;
+      text-align: center;
+      vertical-align: middle;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+    th {
+      background: #f4f6f8;
+      font-weight: 600;
+    }
+    /* Ajuste especial para la columna domingo para evitar solapamiento */
+    td:last-child {
+      padding-right: 12px;
+      box-sizing: border-box;
+    }
+    td.empty {
+      background: #fafafa;
+    }
+    .tertulia {
+      background: #fde7df;
+      font-weight: bold;
+    }
+    .tertulia a {
+      color: #000;
+      text-decoration: none;
+      display: block;
+    }
+
+    /* Media queries para móviles */
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .month {
+        padding: 12px;
+        margin-top: 10px;
+      }
+      table {
+        min-width: 280px;
+      }
+      th, td {
+        padding: 6px 4px;
+        font-size: 0.85em;
+      }
+      td:last-child {
+        padding-right: 8px;
+      }
+      h1, h2 {
+        font-size: 1.2em;
+      }
+      ul {
+        font-size: 0.85em;
+      }
+    }
   </style>
 </head>
 <body>
