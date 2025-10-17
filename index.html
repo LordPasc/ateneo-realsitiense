@@ -503,6 +503,36 @@ document.getElementById("btnGaleria").addEventListener("click", ()=>{
 });
 
 </script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').then(registration => {
+      console.log('ServiceWorker registrado con alcance:', registration.scope);
+
+      registration.onupdatefound = () => {
+        const newWorker = registration.installing;
+        newWorker.onstatechange = () => {
+          if (newWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              // Nueva versión disponible
+              if (confirm("Actualización disponible. ¿Quieres aplicarla ahora?")) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+              }
+            }
+          }
+        };
+      };
+    }).catch(error => {
+      console.error('Error registrando Service Worker:', error);
+    });
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  });
+}
 
 </body>
 </html>
