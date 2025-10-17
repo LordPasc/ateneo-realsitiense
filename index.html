@@ -503,11 +503,11 @@ document.getElementById("btnGaleria").addEventListener("click", ()=>{
 });
 
 </script>
+<script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js').then(registration => {
       console.log('ServiceWorker registrado con alcance:', registration.scope);
-
       registration.onupdatefound = () => {
         const newWorker = registration.installing;
         newWorker.onstatechange = () => {
@@ -524,7 +524,6 @@ if ('serviceWorker' in navigator) {
     }).catch(error => {
       console.error('Error registrando Service Worker:', error);
     });
-
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (refreshing) return;
@@ -533,6 +532,7 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+</script>
 
 </body>
 </html>
