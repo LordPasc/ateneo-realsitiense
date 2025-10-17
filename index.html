@@ -46,31 +46,6 @@ footer a:hover { text-decoration:underline; color: var(--color-acento); }
 #modalLogin { display: flex; justify-content: center; align-items: center; }
 #modalLogin .modal-content h3 { margin-top: 0; }
 #errorLogin { color: red; font-size: 0.9em; margin-top: 0.5em; display: none; }
- .btn-borrar {
-    background: #b30000;
-    border: none;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-left: 6px;
-    transition: background 0.3s ease;
-  }
-
-  .btn-borrar:hover {
-    background: #e60000;
-  }
-
-  .more {
-    color: #1e90ff;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
-  .more:hover {
-    color: #63b3ed;
-  }
 </style>
 </head>
 <body>
@@ -100,15 +75,10 @@ footer a:hover { text-decoration:underline; color: var(--color-acento); }
     </div>
   </section>
 
-<section id="tertulias">
-  <h2>Próxima tertulia</h2>
-  <ul id="upcoming" class="calendar"></ul>
-
-  <h2>Archivo de sesiones pasadas</h2>
-  <ul id="archive" class="archive"></ul>
-</section>
-
-
+  <section id="tertulias">
+    <h2>Archivo de sesiones pasadas</h2>
+    <ul class="archive"></ul>
+  </section>
 
   <section id="nosotros">
     <h2>Quiénes somos</h2>
@@ -207,7 +177,7 @@ footer a:hover { text-decoration:underline; color: var(--color-acento); }
 </footer>
 
 <script>
-const GAS_URL_TERTULIAS = "https://script.google.com/macros/s/AKfycbw0HJNFRcioEvHDH5Z3KACzs6zWWN6_5TuVAt-IxRce9GXEqlYPdmELyGwQmFXMcRb8gw/exec";
+const GAS_URL_TERTULIAS = "https://script.google.com/macros/s/AKfycby_mTcYuKvpuKZbjbjpDOuv5eFwXIEiER6LCs_GCXjhZJRdFa4eA9kMzG0IQaiBKxIzIw/exec";
 
 /* Login y control de roles */
 function mostrarBotonesSegunRol(rol) {
@@ -297,73 +267,49 @@ function inicializarApp(rol) {
 }
 
 /* ---------- CARGA TERTULIAS ---------- */
-function cargarTertulias() {
-  fetch(GAS_URL_TERTULIAS)
-    .then(res => res.json())
-    .then(json => {
-      const upcomingUl = document.getElementById("upcoming");
-      const archive = document.getElementById("archive");
-      upcomingUl.innerHTML = "";
-      archive.innerHTML = "";
-      const today = new Date();
-      const esAdmin = (obtenerSesion() === "admin");
-
-      json.forEach((t, i) => {
-        const fila = i + 2; // fila real en Sheet
-        const fecha = new Date(t.fecha);
-        const fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
-
-        const botonBorrar = esAdmin
-          ? `<button onclick="borrarTertulia(${fila})" class="btn-borrar" title="Borrar tertulia">🗑️</button>`
-          : "";
-
-        if (fecha >= today) {
-          const li = document.createElement("li");
-          li.innerHTML = `<strong>${escapeHtml(t.tema)}</strong> · Fecha: ${fechaStr} · 
-                          <span class="more" onclick="mostrarFoto('${t.foto}')">(click para más datos)</span>
-                          ${botonBorrar}`;
-          upcomingUl.appendChild(li);
-        } else {
-          const liArchive = document.createElement("li");
-          liArchive.innerHTML = `${fechaStr} · ${t.tema} ${botonBorrar}`;
-          archive.appendChild(liArchive);
-        }
-      });
-    })
-    .catch(err => console.error(err));
-}
-
-
-/* ---------- BORRAR TERTULIAS (solo admin) ---------- */
-async function borrarTertuliasConfirm(fila) {
-  if (!confirm("¿Seguro que deseas borrar esta tertulia?")) return;
-  await borrarTertulia(fila);
-}
-
-async function borrarTertulia(fila) {
+async function cargarTertulias(){
   try {
-    const formData = new FormData();
-    formData.append("action", "borrar");
-    formData.append("fila", fila);
-
-    const res = await fetch(GAS_URL_TERTULIAS, {
-      method: "POST",
-      body: formData
-    });
-
-    const data = await res.json();
-    if (data.status === "OK") {
-      alert("Tertulia borrada correctamente.");
-      cargarTertulias(); // recarga la lista actualizada
-    } else {
-      alert("Error: " + (data.message || "No se pudo borrar."));
+    const res = await fetch(GAS_URL_TERTULIAS + "?action=listar");
+    const json = await res.json();
+    const cont = document.getElementById("tabla-container");
+    const mensaje = document.getElementById("mensaje");
+    const archive = document.querySelector(".archive");
+    if(!Array.isArray(json) || json.length===0){
+      mensaje.textContent = "No hay tertulias registradas.";
+      cont.innerHTML = "";
+      archive.innerHTML = "";
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    alert("Error al intentar borrar la tertulia.");
+    json.sort((a,b) => new Date(a.fecha) - new Date(b.fecha));
+    cont.innerHTML = "";
+    archive.innerHTML = "";
+    const today = new Date(); today.setHours(0,0,0,0);
+    const upcomingUl = document.createElement("ul"); upcomingUl.className = "calendar";
+    json.forEach((t, index) => {
+  const fecha = new Date(t.fecha);
+  const fechaStr = fecha.toLocaleDateString('es-ES',{day:'2-digit', month:'short', year:'numeric'});
+  const rol = obtenerSesion();
+  let botonBorrar = "";
+  if (rol === "admin") {
+    botonBorrar = ` <button onclick="borrarTertulia(${index + 2})" style="margin-left:6px; background:#dc3545; color:white; border:none; border-radius:3px; padding:2px 6px; cursor:pointer;">🗑</button>`;
   }
-}
 
+  if(fecha >= today){
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${escapeHtml(t.tema)}</strong> · Fecha: ${fechaStr} ·
+      <span class="more" onclick="mostrarFoto('${t.foto}')">(click para más datos)</span>${botonBorrar}`;
+    upcomingUl.appendChild(li);
+  } else {
+    const liArchive = document.createElement("li");
+    liArchive.innerHTML = `${fechaStr} · ${escapeHtml(t.tema)}${botonBorrar}`;
+    archive.appendChild(liArchive);
+  }
+});
+
+    cont.appendChild(upcomingUl);
+    mensaje.textContent = `Próximas tertulias: ${upcomingUl.children.length}`;
+  } catch(err){ console.error("Error en cargarTertulias:", err);}
+}
 
 function escapeHtml(str) { if(!str) return ""; return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"'").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
@@ -417,6 +363,28 @@ document.getElementById("confirmarTertulia").addEventListener("click",()=>{
     }catch(err){console.error(err); alert("Error enviando datos al servidor.");}
   }
 });
+/* ---------- BORRAR TERTULIA ---------- */
+async function borrarTertulia(fila) {
+  if (!confirm("¿Estás seguro de que deseas borrar esta tertulia? Esta acción no se puede deshacer.")) return;
+  
+  const formData = new FormData();
+  formData.append("action", "borrar");
+  formData.append("fila", fila);
+
+  try {
+    const res = await fetch(GAS_URL_TERTULIAS, { method: "POST", body: formData });
+    const data = await res.json();
+    if (data.status === "OK") {
+      alert("Tertulia eliminada correctamente.");
+      cargarTertulias();
+    } else {
+      alert("Error al borrar tertulia: " + data.message);
+    }
+  } catch (err) {
+    console.error("Error al borrar tertulia:", err);
+    alert("Error al comunicar con el servidor.");
+  }
+}
 
 /* ---------- MODAL AÑADIR FOTOS ---------- */
 const modalFotos=document.getElementById("modalFotos");
