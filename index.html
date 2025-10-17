@@ -37,15 +37,6 @@ footer a:hover { text-decoration:underline; color: var(--color-acento); }
 .modal-footer { text-align:right; }
 .modal-footer button { margin-left:10px; }
 #modalFoto img { max-width:100%; max-height:80vh; border-radius:10px; }
-
-/* Estilos para galería (opcional: si quieres mostrar miniaturas en index más tarde) */
-.mini-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap:8px; margin-top:10px; }
-.mini-grid img { width:100%; height:80px; object-fit:cover; border-radius:6px; cursor:pointer; }
-
-/* Nuevos estilos modal login (por defecto modal visible hasta login) */
-#modalLogin { display: flex; justify-content: center; align-items: center; }
-#modalLogin .modal-content h3 { margin-top: 0; }
-#errorLogin { color: red; font-size: 0.9em; margin-top: 0.5em; display: none; }
 </style>
 </head>
 <body>
@@ -125,6 +116,7 @@ footer a:hover { text-decoration:underline; color: var(--color-acento); }
     <div class="modal-footer">
       <button id="cancelarTertulia">Cancelar</button>
       <button id="confirmarTertulia">Guardar</button>
+      <div id="loadingTertulia" style="display:none; color: var(--color-acento); font-weight: bold; margin-top: 10px;">Cargando...</div>
     </div>
   </div>
 </div>
@@ -138,6 +130,7 @@ footer a:hover { text-decoration:underline; color: var(--color-acento); }
     <div class="modal-footer">
       <button id="cancelarFotos">Cancelar</button>
       <button id="confirmarFotos">Subir</button>
+      <div id="loadingFotos" style="display:none; color: var(--color-acento); font-weight: bold; margin-top: 10px;">Cargando...</div>
     </div>
   </div>
 </div>
@@ -290,18 +283,21 @@ async function cargarTertulias(){
   const fechaStr = fecha.toLocaleDateString('es-ES',{day:'2-digit', month:'short', year:'numeric'});
   const rol = obtenerSesion();
   let botonBorrar = "";
-  if (rol === "admin") {
+
+  // Solo mostrar botón borrar si es admin y la tertulia es futura
+  if (rol === "admin" && fecha >= today) {
     botonBorrar = ` <button onclick="borrarTertulia(${index + 2})" style="margin-left:6px; background:#dc3545; color:white; border:none; border-radius:3px; padding:2px 6px; cursor:pointer;">🗑</button>`;
   }
-
+  
   if(fecha >= today){
     const li = document.createElement("li");
     li.innerHTML = `<strong>${escapeHtml(t.tema)}</strong> · Fecha: ${fechaStr} ·
-      <span class="more" onclick="mostrarFoto('${t.foto}')">(click para más datos)</span>${botonBorrar}`;
+                    <span class="more" onclick="mostrarFoto('${t.foto}')">(click para más datos)</span>${botonBorrar}`;
     upcomingUl.appendChild(li);
   } else {
+    // No incluye el botón borrar en el archivo
     const liArchive = document.createElement("li");
-    liArchive.innerHTML = `${fechaStr} · ${escapeHtml(t.tema)}${botonBorrar}`;
+    liArchive.innerHTML = `${fechaStr} · ${escapeHtml(t.tema)}`;
     archive.appendChild(liArchive);
   }
 });
@@ -322,51 +318,78 @@ document.getElementById("cancelarTertulia").addEventListener("click",()=>{
   document.getElementById("input-fecha").value="";
   document.getElementById("input-foto").value="";
 });
-window.addEventListener("click",(e)=>{if(e.target===modal){modal.style.display="none"; document.getElementById("input-tema").value=""; document.getElementById("input-fecha").value=""; document.getElementById("input-foto").value="";}});
-
-document.getElementById("confirmarTertulia").addEventListener("click",()=>{
-  const tema=document.getElementById("input-tema").value.trim();
-  const fecha=document.getElementById("input-fecha").value;
-  const fotoFile=document.getElementById("input-foto").files[0];
-  if(!tema||!fecha){alert("Debes completar ambos campos: Tema y Fecha."); return;}
-  if(fotoFile){
-    const reader=new FileReader();
-    reader.onload=async function(e){
-      const base64String=e.target.result;
-      const formData=new FormData();
-      formData.append("action","añadir");
-      formData.append("tema",tema);
-      formData.append("fecha",fecha);
-      formData.append("fotoBase64",base64String);
-      await enviarTertulia(formData);
-    };
-    reader.readAsDataURL(fotoFile);
-  }else{
-    const formData=new FormData();
-    formData.append("action","añadir");
-    formData.append("fecha",fecha);
-    formData.append("tema",tema);
-    enviarTertulia(formData);
-  }
-  async function enviarTertulia(formData){
-    try{
-      const res=await fetch(GAS_URL_TERTULIAS,{method:"POST",body:formData});
-      const data=await res.json();
-      if(data.status==="OK"){
-        alert("Tertulia añadida correctamente.");
-        modal.style.display="none";
-        document.getElementById("input-tema").value="";
-        document.getElementById("input-fecha").value="";
-        document.getElementById("input-foto").value="";
-        cargarTertulias();
-      }else{alert("Error: "+data.message);}
-    }catch(err){console.error(err); alert("Error enviando datos al servidor.");}
+window.addEventListener("click",(e)=>{
+  if(e.target===modal){
+    modal.style.display="none";
+    document.getElementById("input-tema").value="";
+    document.getElementById("input-fecha").value="";
+    document.getElementById("input-foto").value="";
   }
 });
+
+document.getElementById("confirmarTertulia").addEventListener("click", () => {
+  const loadingDiv = document.getElementById("loadingTertulia");
+  loadingDiv.style.display = "block"; // Mostrar mensaje de carga
+
+  setTimeout(() => {
+    const tema = document.getElementById("input-tema").value.trim();
+    const fecha = document.getElementById("input-fecha").value;
+    const fotoFile = document.getElementById("input-foto").files[0];
+
+    if(!tema || !fecha){
+      alert("Debes completar ambos campos: Tema y Fecha.");
+      loadingDiv.style.display = "none";
+      return;
+    }
+
+    async function enviarTertulia(formData){
+      try{
+        const res = await fetch(GAS_URL_TERTULIAS,{method:"POST",body:formData});
+        const data = await res.json();
+        if(data.status === "OK"){
+          alert("Tertulia añadida correctamente.");
+          modal.style.display = "none";
+          document.getElementById("input-tema").value="";
+          document.getElementById("input-fecha").value="";
+          document.getElementById("input-foto").value="";
+          cargarTertulias();
+        }else{
+          alert("Error: "+data.message);
+        }
+      }catch(err){
+        console.error(err);
+        alert("Error enviando datos al servidor.");
+      }finally{
+        loadingDiv.style.display = "none";
+      }
+    }
+
+    if(fotoFile){
+      const reader = new FileReader();
+      reader.onload = function(e){
+        const base64String = e.target.result;
+        const formData = new FormData();
+        formData.append("action","añadir");
+        formData.append("tema", tema);
+        formData.append("fecha", fecha);
+        formData.append("fotoBase64", base64String);
+        enviarTertulia(formData);
+      };
+      reader.readAsDataURL(fotoFile);
+    }else{
+      const formData = new FormData();
+      formData.append("action","añadir");
+      formData.append("fecha", fecha);
+      formData.append("tema", tema);
+      enviarTertulia(formData);
+    }
+  },50);
+});
+
 /* ---------- BORRAR TERTULIA ---------- */
 async function borrarTertulia(fila) {
   if (!confirm("¿Estás seguro de que deseas borrar esta tertulia? Esta acción no se puede deshacer.")) return;
-  
+
   const formData = new FormData();
   formData.append("action", "borrar");
   formData.append("fila", fila);
@@ -380,7 +403,7 @@ async function borrarTertulia(fila) {
     } else {
       alert("Error al borrar tertulia: " + data.message);
     }
-  } catch (err) {
+  } catch(err) {
     console.error("Error al borrar tertulia:", err);
     alert("Error al comunicar con el servidor.");
   }
@@ -389,43 +412,75 @@ async function borrarTertulia(fila) {
 /* ---------- MODAL AÑADIR FOTOS ---------- */
 const modalFotos=document.getElementById("modalFotos");
 document.getElementById("btnAñadirFoto").addEventListener("click",()=>{modalFotos.style.display="flex";});
-document.getElementById("cancelarFotos").addEventListener("click",()=>{modalFotos.style.display="none"; document.getElementById("input-fotos").value="";});
-window.addEventListener("click",(e)=>{if(e.target===modalFotos){modalFotos.style.display="none"; document.getElementById("input-fotos").value="";}});
-
-document.getElementById("confirmarFotos").addEventListener("click",async ()=>{
-  const files=document.getElementById("input-fotos").files;
-  if(!files||files.length===0){alert("Selecciona al menos una foto."); return;}
-  for(let i=0;i<files.length;i++){
-    const file=files[i];
-    try{await subirArchivoComoBase64(file); console.log(`Foto ${i+1}/${files.length} subida.`);} 
-    catch(err){console.error("Error subiendo archivo:",err); alert("Se produjo un error subiendo una de las fotos. Revisa la consola.");}
+document.getElementById("cancelarFotos").addEventListener("click",()=>{
+  modalFotos.style.display="none";
+  document.getElementById("input-fotos").value="";
+});
+window.addEventListener("click",(e)=>{
+  if(e.target===modalFotos){
+    modalFotos.style.display="none";
+    document.getElementById("input-fotos").value="";
   }
-  alert("Subida finalizada."); modalFotos.style.display="none"; document.getElementById("input-fotos").value="";
+});
+
+document.getElementById("confirmarFotos").addEventListener("click", async () => {
+  const loadingDiv = document.getElementById("loadingFotos");
+  loadingDiv.style.display = "block"; // Mostrar mensaje de carga
+
+  const files = document.getElementById("input-fotos").files;
+  if(!files || files.length === 0){
+    alert("Selecciona al menos una foto.");
+    loadingDiv.style.display = "none";
+    return;
+  }
+
+  for(let i=0; i < files.length; i++){
+    const file = files[i];
+    try{
+      await subirArchivoComoBase64(file);
+      console.log(`Foto ${i+1}/${files.length} subida.`);
+    }catch(err){
+      console.error("Error subiendo archivo:", err);
+      alert("Se produjo un error subiendo una de las fotos. Revisa la consola.");
+    }
+  }
+  alert("Subida finalizada.");
+  modalFotos.style.display = "none";
+  document.getElementById("input-fotos").value="";
+  loadingDiv.style.display = "none"; // Ocultar mensaje de carga
 });
 
 function subirArchivoComoBase64(file){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onload=async function(e){
-      const base64String=e.target.result;
-      const formData=new FormData();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async function(e){
+      const base64String = e.target.result;
+      const formData = new FormData();
       formData.append("action","subirFoto");
-      formData.append("fotoBase64",base64String);
+      formData.append("fotoBase64", base64String);
       try{
-        const res=await fetch(GAS_URL_TERTULIAS,{method:"POST",body:formData});
-        const data=await res.json();
-        if(data.status==="OK"){resolve(data);} 
-        else{reject(new Error(data.message||"Error en respuesta del servidor"));}
-      }catch(err){reject(err);}
+        const res = await fetch(GAS_URL_TERTULIAS,{method:"POST",body:formData});
+        const data = await res.json();
+        if(data.status === "OK"){
+          resolve(data);
+        }else{
+          reject(new Error(data.message || "Error en respuesta del servidor"));
+        }
+      }catch(err){
+        reject(err);
+      }
     };
-    reader.onerror=(err)=>reject(err);
+    reader.onerror = (err) => reject(err);
     reader.readAsDataURL(file);
   });
 }
 
 /* ---------- VISUALIZACIÓN DE IMÁGENES ---------- */
 function mostrarFoto(url){
-  if(!url){ alert("Esta tertulia no tiene foto asociada."); return; }
+  if(!url){
+    alert("Esta tertulia no tiene foto asociada.");
+    return;
+  }
   window.open(url, "_blank");
 }
 
@@ -447,68 +502,6 @@ document.getElementById("btnGaleria").addEventListener("click", ()=>{
   window.open("galeria.html", "_blank");
 });
 
-</script>
-<script>
-const SHEET_URL_FORO = "https://script.google.com/macros/s/AKfycbxfzb-_1GzI4fdjLVK7jeboiUt8m70CngW_XmgFKUjH983B878xqSjuJKKQfYK5EURL5Q/exec";
-
-async function cargarConsultasIndex() {
-  const cont = document.getElementById("consultasContainerIndex");
-  cont.innerHTML = "<p>Cargando consultas...</p>";
-  try {
-    const res = await fetch(SHEET_URL_FORO + "?action=listar");
-    const json = await res.json();
-    if(!Array.isArray(json) || json.length === 0){
-      cont.innerHTML = "<p>No hay consultas aún.</p>";
-      return;
-    }
-    cont.innerHTML = "";
-    json.forEach(c => {
-      const div = document.createElement("div");
-      div.className = "consulta";
-      div.innerHTML = `<p><strong>${escapeHtml(c.nombre)}${c.email ? " ("+escapeHtml(c.email)+")":""}:</strong> ${escapeHtml(c.comentario)}</p>
-                       <p><strong>GHK:</strong> ${escapeHtml(c.respuesta || "Pendiente de respuesta")}</p>`;
-      cont.appendChild(div);
-    });
-  } catch(err) {
-    console.error(err);
-    cont.innerHTML = "<p>Error cargando consultas.</p>";
-  }
-}
-
-document.getElementById("formularioConsultaIndex").addEventListener("submit", async function(e){
-  e.preventDefault();
-  const nombre = document.getElementById("nombreIndex").value.trim();
-  const email = document.getElementById("emailIndex").value.trim();
-  const comentario = document.getElementById("comentarioIndex").value.trim();
-  if(!nombre || !comentario){ alert("Debes completar Nombre y Consulta."); return; }
-  const formData = new FormData();
-  formData.append("action","añadir");
-  formData.append("nombre",nombre);
-  formData.append("email",email);
-  formData.append("comentario",comentario);
-  try{
-    const res = await fetch(SHEET_URL_FORO,{ method:"POST", body:formData });
-    const data = await res.json();
-    if(data.status === "OK"){
-      alert("Consulta enviada correctamente.");
-      document.getElementById("formularioConsultaIndex").reset();
-      cargarConsultasIndex();
-    } else {
-      alert("Error: " + data.message);
-    }
-  }catch(err){
-    console.error(err);
-    alert("Error enviando la consulta.");
-  }
-});
-
-function escapeHtml(str){
-  if(!str) return "";
-  return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"'").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-
-// Carga inicial
-cargarConsultasIndex();
 </script>
 
 </body>
