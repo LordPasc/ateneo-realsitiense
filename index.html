@@ -1,122 +1,89 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>Ateneo Realsitiense</title>
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 :root {
   --color-primario: #2c3e50;
   --color-secundario: #ecf0f1;
   --color-acento: #c0392b;
 }
-body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; color: var(--color-primario); background: var(--color-secundario); }
+body { font-family: 'Segoe UI', sans-serif; margin:0; padding:0; color: var(--color-primario); background: var(--color-secundario); }
 header { background: var(--color-primario); color: #fff; padding: 1em; text-align: center; }
-.header-logo { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1em; }
-.header-logo img { height: 80px; width: auto; }
-nav { margin-top: 0.5em; }
-nav a { margin: 0 0.7em; color: #fff; text-decoration: none; font-weight: bold; }
+.header-logo { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:1em; }
+.header-logo img { height:80px; width:auto; }
+nav { margin-top:0.5em; }
+nav a { margin:0 0.7em; color:#fff; text-decoration:none; font-weight:bold; }
 nav a:hover { color: var(--color-acento); }
-main { padding: 2em 1em; max-width: 900px; margin: 0 auto; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.05); border-radius: 6px; }
-section { margin-bottom: 2.5em; }
-h1, h2, h3 { font-family: Georgia, serif; }
-h2 { border-bottom: 2px solid var(--color-acento); padding-bottom: 0.3em; color: var(--color-primario); }
-.calendar, .archive { list-style: none; padding: 0; }
-.calendar li, .archive li { margin: 0.5em 0; }
-.board ul { list-style: none; padding: 0; }
-.board li { margin: 0.3em 0; }
-a.button, button { display: inline-block; margin-top: 1em; padding: 0.5em 1em; background: var(--color-acento); color: #fff; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; }
-a.button:hover, button:hover { background: #96281b; }
-.more { font-weight: normal; font-size: 0.9em; opacity: 0.8; cursor: pointer; color: var(--color-acento); }
-footer { background: var(--color-primario); color: #fff; text-align: center; padding: 1em; margin-top: 2em; }
-footer a { color: #ecf0f1; text-decoration: none; margin: 0 5px; }
-footer a:hover { text-decoration: underline; color: var(--color-acento); }
-.modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
-.modal-content { background-color: #fff; margin: auto; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 0 10px var(--color-acento); position: relative; }
-.modal-content label, .modal-content input { display: block; width: 100%; margin-bottom: 15px; font-size: 1em; box-sizing: border-box; }
-.modal-footer { text-align: right; }
-.modal-footer button { margin-left: 10px; }
-#modalFoto img { max-width: 100%; max-height: 80vh; border-radius: 10px; }
+main { padding:2em 1em; max-width:900px; margin:0 auto; background:#fff; box-shadow:0 0 10px rgba(0,0,0,0.05); border-radius:6px; }
+section { margin-bottom:2.5em; }
+h1,h2,h3 { font-family: Georgia, serif; }
+h2 { border-bottom:2px solid var(--color-acento); padding-bottom:0.3em; color: var(--color-primario); }
+.calendar, .archive { list-style:none; padding:0; }
+.calendar li, .archive li { margin:0.5em 0; }
+.board ul { list-style:none; padding:0; }
+.board li { margin:0.3em 0; }
+a.button, button { display:inline-block; margin-top:1em; padding:0.5em 1em; background: var(--color-acento); color:#fff; text-decoration:none; border-radius:4px; border:none; cursor:pointer; }
+a.button:hover, button:hover { background:#96281b; }
+.more { font-weight: normal; font-size: 0.9em; opacity:0.8; cursor:pointer; color:var(--color-acento);}
+footer { background: var(--color-primario); color:#fff; text-align:center; padding:1em; margin-top:2em; }
+footer a { color:#ecf0f1; text-decoration:none; margin:0 5px; }
+footer a:hover { text-decoration:underline; color: var(--color-acento); }
+.modal { display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.6); justify-content:center; align-items:center; }
+.modal-content { background-color:#fff; margin:auto; padding:20px; border-radius:10px; width:90%; max-width:400px; box-shadow:0 0 10px var(--color-acento); position:relative; }
+.modal-content label, .modal-content input { display:block; width:100%; margin-bottom:15px; font-size:1em; box-sizing:border-box; }
+.modal-footer { text-align:right; }
+.modal-footer button { margin-left:10px; }
+#modalFoto img { max-width:100%; max-height:80vh; border-radius:10px; }
 
 /* Estilos para galería (opcional: si quieres mostrar miniaturas en index más tarde) */
-.mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 8px; margin-top: 10px; }
-.mini-grid img { width: 100%; height: 80px; object-fit: cover; border-radius: 6px; cursor: pointer; }
+.mini-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap:8px; margin-top:10px; }
+.mini-grid img { width:100%; height:80px; object-fit:cover; border-radius:6px; cursor:pointer; }
 
-/* Nuevos estilos modal login con botón invitado destacado y login admin discreto */
+/* Nuevos estilos modal login (por defecto modal visible hasta login) */
 #modalLogin { display: flex; justify-content: center; align-items: center; }
-#modalLogin .modal-content {
-  max-width: 320px;
-  padding: 15px;
-}
-#modalLogin h3 {
-  font-size: 1.2em;
-  margin-bottom: 1em;
-}
-#entrarInvitado {
-  background-color: var(--color-acento);
-  color: #fff;
-  width: 100%;
-  padding: 12px 10px;
-  font-size: 1.1em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 16px;
-  font-weight: bold;
-}
-#modalLogin hr {
-  margin: 16px 0;
-  border-color: #ccc;
-}
-#modalLogin h4 {
-  color: #666;
-  font-weight: normal;
-  margin-bottom: 0.5em;
-}
-#usuarioLogin, #passwordLogin {
-  width: 100%;
-  padding: 6px;
-  font-size: 0.9em;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-#cancelarLogin {
-  background: none;
-  border: none;
-  color: var(--color-acento);
-  font-weight: bold;
-  cursor: pointer;
-  margin-right: 10px;
-  font-size: 0.9em;
-}
-#aceptarLogin {
-  background-color: #444;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  font-size: 0.95em;
-  border-radius: 5px;
-  cursor: pointer;
-}
-#errorLogin {
-  color: red;
-  font-size: 0.85em;
-  margin-top: 0.5em;
-  display: none;
-}
+#modalLogin .modal-content h3 { margin-top: 0; }
+#errorLogin { color: red; font-size: 0.9em; margin-top: 0.5em; display: none; }
+ .btn-borrar {
+    background: #b30000;
+    border: none;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 6px;
+    transition: background 0.3s ease;
+  }
+
+  .btn-borrar:hover {
+    background: #e60000;
+  }
+
+  .more {
+    color: #1e90ff;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .more:hover {
+    color: #63b3ed;
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-logo">
-    <img src="logo.jpg" alt="Logo Ateneo Realsitiense" />
+    <img src="logo.jpg" alt="Logo Ateneo Realsitiense">
     <h1>Ateneo Realsitiense</h1>
   </div>
   <nav>
     <a href="#tertulias">Tertulias</a>
     <a href="#nosotros">Quiénes somos</a>
+    <a href="#foro">Foro</a> 
     <a href="#contacto">Contacto</a>
   </nav>
 </header>
@@ -126,15 +93,23 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
     <h2>Próxima tertulia</h2>
     <div id="mensaje">Cargando tertulias...</div>
     <div id="tabla-container"></div>
+
     <div style="display:flex; gap:10px; flex-wrap: wrap; margin-top:10px;">
       <a href="calendario.html" target="_blank" rel="noopener noreferrer" class="button">Ver calendario completo</a>
       <button id="btnAbrirModal" class="button">➕ Añadir tertulia</button>
     </div>
   </section>
-  <section id="tertulias">
-    <h2>Archivo de sesiones pasadas</h2>
-    <ul class="archive"></ul>
-  </section>
+
+<section id="tertulias">
+  <h2>Próxima tertulia</h2>
+  <ul id="upcoming" class="calendar"></ul>
+
+  <h2>Archivo de sesiones pasadas</h2>
+  <ul id="archive" class="archive"></ul>
+</section>
+
+
+
   <section id="nosotros">
     <h2>Quiénes somos</h2>
     <div class="board">
@@ -146,11 +121,19 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
     </div>
     <h3>Estatutos</h3>
     <p><a href="estatutos.pdf" target="_blank">Descarga los estatutos (PDF)</a></p>
+
     <div style="margin-top:1em;">
       <button id="btnGaleria" class="button">📸 Galería fotográfica</button>
       <button id="btnAñadirFoto" class="button">➕ Añadir fotos</button>
     </div>
   </section>
+
+<section id="foro">
+  <h2>Foro</h2>
+  <p>Espacio de discusión para los miembros del Ateneo y tertulianos.</p>
+  <a href="foro.html" target="_blank" class="button">Acceso al foro</a>
+</section>
+
   <section id="contacto">
     <h2>Contacto y socio</h2>
     <p>Formulario de contacto aquí o escríbenos a <a href="mailto:ateneorealsitiense@gmail.com">ateneorealsitiense@gmail.com</a></p>
@@ -193,22 +176,21 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 <div id="modalFoto" class="modal" style="display:none; align-items:center; justify-content:center;">
   <div class="modal-content">
     <span style="position:absolute; top:10px; right:10px; cursor:pointer;" onclick="cerrarModalFoto()">✕</span>
-    <img id="imagenModal" src="" alt="Foto de tertulia" />
+    <img id="imagenModal" src="" alt="Foto de tertulia"/>
   </div>
 </div>
 
 <!-- Modal Login -->
 <div id="modalLogin" class="modal" style="display:flex; justify-content:center; align-items:center;">
-  <div class="modal-content">
-    <button id="entrarInvitado">Acceso Tertulianos</button>
-    <hr />
-    <h4>Login Administrador</h4>
+  <div class="modal-content" style="max-width:400px;">
+    <h3>Iniciar sesión</h3>
     <label for="usuarioLogin">Usuario</label>
     <input type="text" id="usuarioLogin" autocomplete="username" />
     <label for="passwordLogin">Contraseña</label>
     <input type="password" id="passwordLogin" autocomplete="current-password" />
-    <div class="modal-footer">
+    <div class="modal-footer" style="text-align:right;">
       <button id="cancelarLogin">Cancelar</button>
+      <button id="entrarInvitado">Entrar como invitado</button>
       <button id="aceptarLogin">Entrar</button>
     </div>
     <p id="errorLogin"></p>
@@ -217,23 +199,27 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 
 <footer>
   <p>
-    Ateneo Realsitiense – ©2025 – <a href="aviso-legal.html" target="_blank">Aviso legal</a> | <a href="privacidad.html" target="_blank">Política de privacidad</a> | <a href="cookies.html" target="_blank">Política de cookies</a>
+    Ateneo Realsitiense – ©2025 – 
+    <a href="aviso-legal.html" target="_blank">Aviso legal</a> | 
+    <a href="privacidad.html" target="_blank">Política de privacidad</a> | 
+    <a href="cookies.html" target="_blank">Política de cookies</a>
   </p>
 </footer>
 
 <script>
-const GAS_URL_TERTULIAS = "https://script.google.com/macros/s/AKfycbxnD-USYB1pR6G8lA85elINIKIDjRNXx7R2J3LQfijEfUgEQ8IX0D0Um6HOkK3rxZAb5g/exec";
+const GAS_URL_TERTULIAS = "https://script.google.com/macros/s/AKfycbw0HJNFRcioEvHDH5Z3KACzs6zWWN6_5TuVAt-IxRce9GXEqlYPdmELyGwQmFXMcRb8gw/exec";
 
+/* Login y control de roles */
 function mostrarBotonesSegunRol(rol) {
   const esAdmin = (rol === "admin");
   const btnAddTertulia = document.getElementById("btnAbrirModal");
   const btnAddFoto = document.getElementById("btnAñadirFoto");
   if (!esAdmin) {
-    if (btnAddTertulia) btnAddTertulia.style.display = "none";
-    if (btnAddFoto) btnAddFoto.style.display = "none";
+    if(btnAddTertulia) btnAddTertulia.style.display = "none";
+    if(btnAddFoto) btnAddFoto.style.display = "none";
   } else {
-    if (btnAddTertulia) btnAddTertulia.style.display = "inline-block";
-    if (btnAddFoto) btnAddFoto.style.display = "inline-block";
+    if(btnAddTertulia) btnAddTertulia.style.display = "inline-block";
+    if(btnAddFoto) btnAddFoto.style.display = "inline-block";
   }
 }
 
@@ -310,201 +296,252 @@ function inicializarApp(rol) {
   }
 }
 
-async function cargarTertulias() {
-  try {
-    const res = await fetch(GAS_URL_TERTULIAS + "?action=listar");
-    const json = await res.json();
-    const cont = document.getElementById("tabla-container");
-    const mensaje = document.getElementById("mensaje");
-    const archive = document.querySelector(".archive");
-    if (!Array.isArray(json) || json.length === 0) {
-      mensaje.textContent = "No hay tertulias registradas.";
-      cont.innerHTML = "";
+/* ---------- CARGA TERTULIAS ---------- */
+function cargarTertulias() {
+  fetch(GAS_URL_TERTULIAS)
+    .then(res => res.json())
+    .then(json => {
+      const upcomingUl = document.getElementById("upcoming");
+      const archive = document.getElementById("archive");
+      upcomingUl.innerHTML = "";
       archive.innerHTML = "";
-      return;
-    }
-    json.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-    cont.innerHTML = "";
-    archive.innerHTML = "";
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const upcomingUl = document.createElement("ul");
-    upcomingUl.className = "calendar";
-    json.forEach(t => {
-      const fecha = new Date(t.fecha);
-      const fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
-      if (fecha >= today) {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>${escapeHtml(t.tema)}</strong> · Fecha: ${fechaStr} · 
-          <span class="more" onclick="mostrarFoto('${t.foto}')">(click para más datos)</span>`;
-        upcomingUl.appendChild(li);
-      } else {
-        const liArchive = document.createElement("li");
-        liArchive.textContent = `${fechaStr} · ${t.tema}`;
-        archive.appendChild(liArchive);
-      }
+      const today = new Date();
+      const esAdmin = (obtenerSesion() === "admin");
+
+      json.forEach((t, i) => {
+        const fila = i + 2; // fila real en Sheet
+        const fecha = new Date(t.fecha);
+        const fechaStr = fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+
+        const botonBorrar = esAdmin
+          ? `<button onclick="borrarTertulia(${fila})" class="btn-borrar" title="Borrar tertulia">🗑️</button>`
+          : "";
+
+        if (fecha >= today) {
+          const li = document.createElement("li");
+          li.innerHTML = `<strong>${escapeHtml(t.tema)}</strong> · Fecha: ${fechaStr} · 
+                          <span class="more" onclick="mostrarFoto('${t.foto}')">(click para más datos)</span>
+                          ${botonBorrar}`;
+          upcomingUl.appendChild(li);
+        } else {
+          const liArchive = document.createElement("li");
+          liArchive.innerHTML = `${fechaStr} · ${t.tema} ${botonBorrar}`;
+          archive.appendChild(liArchive);
+        }
+      });
+    })
+    .catch(err => console.error(err));
+}
+
+
+/* ---------- BORRAR TERTULIAS (solo admin) ---------- */
+async function borrarTertuliasConfirm(fila) {
+  if (!confirm("¿Seguro que deseas borrar esta tertulia?")) return;
+  await borrarTertulia(fila);
+}
+
+async function borrarTertulia(fila) {
+  try {
+    const formData = new FormData();
+    formData.append("action", "borrar");
+    formData.append("fila", fila);
+
+    const res = await fetch(GAS_URL_TERTULIAS, {
+      method: "POST",
+      body: formData
     });
-    cont.appendChild(upcomingUl);
-    mensaje.textContent = `Próximas tertulias: ${upcomingUl.children.length}`;
+
+    const data = await res.json();
+    if (data.status === "OK") {
+      alert("Tertulia borrada correctamente.");
+      cargarTertulias(); // recarga la lista actualizada
+    } else {
+      alert("Error: " + (data.message || "No se pudo borrar."));
+    }
   } catch (err) {
-    console.error("Error en cargarTertulias:", err);
+    console.error(err);
+    alert("Error al intentar borrar la tertulia.");
   }
 }
 
-function escapeHtml(str) {
-  if (!str) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "'")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
 
+function escapeHtml(str) { if(!str) return ""; return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"'").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+/* ---------- MODAL AÑADIR TERTULIA ---------- */
 const modal = document.getElementById("modalTertulia");
-document.getElementById("btnAbrirModal").addEventListener("click", () => modal.style.display = "flex");
-document.getElementById("cancelarTertulia").addEventListener("click", () => {
-  modal.style.display = "none";
-  document.getElementById("input-tema").value = "";
-  document.getElementById("input-fecha").value = "";
-  document.getElementById("input-foto").value = "";
+document.getElementById("btnAbrirModal").addEventListener("click",()=>modal.style.display="flex");
+document.getElementById("cancelarTertulia").addEventListener("click",()=>{
+  modal.style.display="none";
+  document.getElementById("input-tema").value="";
+  document.getElementById("input-fecha").value="";
+  document.getElementById("input-foto").value="";
 });
-window.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.style.display = "none";
-    document.getElementById("input-tema").value = "";
-    document.getElementById("input-fecha").value = "";
-    document.getElementById("input-foto").value = "";
-  }
-});
+window.addEventListener("click",(e)=>{if(e.target===modal){modal.style.display="none"; document.getElementById("input-tema").value=""; document.getElementById("input-fecha").value=""; document.getElementById("input-foto").value="";}});
 
-document.getElementById("confirmarTertulia").addEventListener("click", () => {
-  const tema = document.getElementById("input-tema").value.trim();
-  const fecha = document.getElementById("input-fecha").value;
-  const fotoFile = document.getElementById("input-foto").files[0];
-  if (!tema || !fecha) { alert("Debes completar ambos campos: Tema y Fecha."); return; }
-  if (fotoFile) {
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      const base64String = e.target.result;
-      const formData = new FormData();
-      formData.append("action", "añadir");
-      formData.append("tema", tema);
-      formData.append("fecha", fecha);
-      formData.append("fotoBase64", base64String);
+document.getElementById("confirmarTertulia").addEventListener("click",()=>{
+  const tema=document.getElementById("input-tema").value.trim();
+  const fecha=document.getElementById("input-fecha").value;
+  const fotoFile=document.getElementById("input-foto").files[0];
+  if(!tema||!fecha){alert("Debes completar ambos campos: Tema y Fecha."); return;}
+  if(fotoFile){
+    const reader=new FileReader();
+    reader.onload=async function(e){
+      const base64String=e.target.result;
+      const formData=new FormData();
+      formData.append("action","añadir");
+      formData.append("tema",tema);
+      formData.append("fecha",fecha);
+      formData.append("fotoBase64",base64String);
       await enviarTertulia(formData);
     };
     reader.readAsDataURL(fotoFile);
-  } else {
-    const formData = new FormData();
-    formData.append("action", "añadir");
-    formData.append("fecha", fecha);
-    formData.append("tema", tema);
+  }else{
+    const formData=new FormData();
+    formData.append("action","añadir");
+    formData.append("fecha",fecha);
+    formData.append("tema",tema);
     enviarTertulia(formData);
   }
-  async function enviarTertulia(formData) {
-    try {
-      const res = await fetch(GAS_URL_TERTULIAS, {method: "POST", body: formData});
-      const data = await res.json();
-      if (data.status === "OK") {
+  async function enviarTertulia(formData){
+    try{
+      const res=await fetch(GAS_URL_TERTULIAS,{method:"POST",body:formData});
+      const data=await res.json();
+      if(data.status==="OK"){
         alert("Tertulia añadida correctamente.");
-        modal.style.display = "none";
-        document.getElementById("input-tema").value = "";
-        document.getElementById("input-fecha").value = "";
-        document.getElementById("input-foto").value = "";
+        modal.style.display="none";
+        document.getElementById("input-tema").value="";
+        document.getElementById("input-fecha").value="";
+        document.getElementById("input-foto").value="";
         cargarTertulias();
-      } else {
-        alert("Error: " + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error enviando datos al servidor.");
-    }
+      }else{alert("Error: "+data.message);}
+    }catch(err){console.error(err); alert("Error enviando datos al servidor.");}
   }
 });
 
-const modalFotos = document.getElementById("modalFotos");
-document.getElementById("btnAñadirFoto").addEventListener("click", () => { modalFotos.style.display = "flex"; });
-document.getElementById("cancelarFotos").addEventListener("click", () => { modalFotos.style.display = "none"; document.getElementById("input-fotos").value = ""; });
-window.addEventListener("click", (e) => { if (e.target === modalFotos) { modalFotos.style.display = "none"; document.getElementById("input-fotos").value = ""; } });
+/* ---------- MODAL AÑADIR FOTOS ---------- */
+const modalFotos=document.getElementById("modalFotos");
+document.getElementById("btnAñadirFoto").addEventListener("click",()=>{modalFotos.style.display="flex";});
+document.getElementById("cancelarFotos").addEventListener("click",()=>{modalFotos.style.display="none"; document.getElementById("input-fotos").value="";});
+window.addEventListener("click",(e)=>{if(e.target===modalFotos){modalFotos.style.display="none"; document.getElementById("input-fotos").value="";}});
 
-document.getElementById("confirmarFotos").addEventListener("click", async () => {
-  const files = document.getElementById("input-fotos").files;
-  if (!files || files.length === 0) { alert("Selecciona al menos una foto."); return; }
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    try {
-      await subirArchivoComoBase64(file);
-      console.log(`Foto ${i + 1}/${files.length} subida.`);
-    } catch (err) {
-      console.error("Error subiendo archivo:", err);
-      alert("Se produjo un error subiendo una de las fotos. Revisa la consola.");
-    }
+document.getElementById("confirmarFotos").addEventListener("click",async ()=>{
+  const files=document.getElementById("input-fotos").files;
+  if(!files||files.length===0){alert("Selecciona al menos una foto."); return;}
+  for(let i=0;i<files.length;i++){
+    const file=files[i];
+    try{await subirArchivoComoBase64(file); console.log(`Foto ${i+1}/${files.length} subida.`);} 
+    catch(err){console.error("Error subiendo archivo:",err); alert("Se produjo un error subiendo una de las fotos. Revisa la consola.");}
   }
-  alert("Subida finalizada.");
-  modalFotos.style.display = "none";
-  document.getElementById("input-fotos").value = "";
+  alert("Subida finalizada."); modalFotos.style.display="none"; document.getElementById("input-fotos").value="";
 });
 
-function subirArchivoComoBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      const base64String = e.target.result;
-      const formData = new FormData();
-      formData.append("action", "subirFoto");
-      formData.append("fotoBase64", base64String);
-      try {
-        const res = await fetch(GAS_URL_TERTULIAS, {method: "POST", body: formData});
-        const data = await res.json();
-        if (data.status === "OK") {
-          resolve(data);
-        } else {
-          reject(new Error(data.message || "Error en respuesta del servidor"));
-        }
-      } catch (err) {
-        reject(err);
-      }
+function subirArchivoComoBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=async function(e){
+      const base64String=e.target.result;
+      const formData=new FormData();
+      formData.append("action","subirFoto");
+      formData.append("fotoBase64",base64String);
+      try{
+        const res=await fetch(GAS_URL_TERTULIAS,{method:"POST",body:formData});
+        const data=await res.json();
+        if(data.status==="OK"){resolve(data);} 
+        else{reject(new Error(data.message||"Error en respuesta del servidor"));}
+      }catch(err){reject(err);}
     };
-    reader.onerror = (err) => reject(err);
+    reader.onerror=(err)=>reject(err);
     reader.readAsDataURL(file);
   });
 }
 
-function mostrarFoto(url) {
-  if (!url) {
-    alert("Esta tertulia no tiene foto asociada.");
-    return;
-  }
+/* ---------- VISUALIZACIÓN DE IMÁGENES ---------- */
+function mostrarFoto(url){
+  if(!url){ alert("Esta tertulia no tiene foto asociada."); return; }
   window.open(url, "_blank");
 }
 
-function abrirModalFoto(url) {
+function abrirModalFoto(url){
   const mf = document.getElementById("modalFoto");
   const imagen = document.getElementById("imagenModal");
   imagen.src = url || "";
   mf.style.display = "flex";
 }
 
-function cerrarModalFoto() {
+function cerrarModalFoto(){
   const mf = document.getElementById("modalFoto");
   mf.style.display = "none";
   document.getElementById("imagenModal").src = "";
 }
 
-// Botón Galería
-document.getElementById("btnGaleria").addEventListener("click", () => {
+/* ---------- BOTÓN GALERÍA ---------- */
+document.getElementById("btnGaleria").addEventListener("click", ()=>{
   window.open("galeria.html", "_blank");
 });
 
-window.addEventListener("load", () => {
-  const rol = obtenerSesion();
-  if (rol) {
-    inicializarApp(rol);
-  } else {
-    mostrarLogin();
+</script>
+<script>
+const SHEET_URL_FORO = "https://script.google.com/macros/s/AKfycbxfzb-_1GzI4fdjLVK7jeboiUt8m70CngW_XmgFKUjH983B878xqSjuJKKQfYK5EURL5Q/exec";
+
+async function cargarConsultasIndex() {
+  const cont = document.getElementById("consultasContainerIndex");
+  cont.innerHTML = "<p>Cargando consultas...</p>";
+  try {
+    const res = await fetch(SHEET_URL_FORO + "?action=listar");
+    const json = await res.json();
+    if(!Array.isArray(json) || json.length === 0){
+      cont.innerHTML = "<p>No hay consultas aún.</p>";
+      return;
+    }
+    cont.innerHTML = "";
+    json.forEach(c => {
+      const div = document.createElement("div");
+      div.className = "consulta";
+      div.innerHTML = `<p><strong>${escapeHtml(c.nombre)}${c.email ? " ("+escapeHtml(c.email)+")":""}:</strong> ${escapeHtml(c.comentario)}</p>
+                       <p><strong>GHK:</strong> ${escapeHtml(c.respuesta || "Pendiente de respuesta")}</p>`;
+      cont.appendChild(div);
+    });
+  } catch(err) {
+    console.error(err);
+    cont.innerHTML = "<p>Error cargando consultas.</p>";
+  }
+}
+
+document.getElementById("formularioConsultaIndex").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const nombre = document.getElementById("nombreIndex").value.trim();
+  const email = document.getElementById("emailIndex").value.trim();
+  const comentario = document.getElementById("comentarioIndex").value.trim();
+  if(!nombre || !comentario){ alert("Debes completar Nombre y Consulta."); return; }
+  const formData = new FormData();
+  formData.append("action","añadir");
+  formData.append("nombre",nombre);
+  formData.append("email",email);
+  formData.append("comentario",comentario);
+  try{
+    const res = await fetch(SHEET_URL_FORO,{ method:"POST", body:formData });
+    const data = await res.json();
+    if(data.status === "OK"){
+      alert("Consulta enviada correctamente.");
+      document.getElementById("formularioConsultaIndex").reset();
+      cargarConsultasIndex();
+    } else {
+      alert("Error: " + data.message);
+    }
+  }catch(err){
+    console.error(err);
+    alert("Error enviando la consulta.");
   }
 });
+
+function escapeHtml(str){
+  if(!str) return "";
+  return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"'").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// Carga inicial
+cargarConsultasIndex();
 </script>
+
 </body>
 </html>

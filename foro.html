@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Foro - Ateneo Realsitiense</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body { font-family: 'Segoe UI', sans-serif; background:#f9f9f9; color:#2c3e50; margin:0; padding:1em; }
+h1,h2 { font-family: Georgia, serif; color:#c0392b; }
+form { max-width:500px; margin-bottom:2em; }
+label { display:block; margin-top:1em; }
+input, textarea { width:100%; padding:0.5em; margin-top:0.3em; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; }
+textarea { min-height:80px; resize:vertical; }
+button { margin-top:1em; padding:0.5em 1em; background:#c0392b; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+button:hover { background:#96281b; }
+.consulta { background:#ecf0f1; padding:0.8em; margin-bottom:0.5em; border-radius:6px; }
+.consulta strong { color:#2c3e50; }
+</style>
+</head>
+<body>
+
+<h1>Foro - Ateneo Realsitiense</h1>
+<p>Espacio de discusión del Ateneo Realsitiense:</p>
+
+<form id="formConsulta">
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" placeholder="Tu nombre" required />
+
+  <label for="comentario">Consulta:</label>
+  <textarea id="comentario" placeholder="Escribe tu consulta" required></textarea>
+
+  <button type="submit">Enviar Consulta</button>
+</form>
+
+<h2>Consultas recibidas</h2>
+<div id="consultasContainer">Cargando consultas...</div>
+
+<script>
+const GAS_URL_FORO = "https://script.google.com/macros/s/AKfycbxfzb-_1GzI4fdjLVK7jeboiUt8m70CngW_XmgFKUjH983B878xqSjuJKKQfYK5EURL5Q/exec";
+
+// Cargar consultas existentes
+async function cargarConsultas() {
+  try {
+    const res = await fetch(GAS_URL_FORO + "?action=listar");
+    const json = await res.json();
+    const cont = document.getElementById("consultasContainer");
+    cont.innerHTML = "";
+    if (!Array.isArray(json) || json.length === 0) {
+      cont.textContent = "No hay consultas todavía.";
+      return;
+    }
+    json.forEach(c => {
+      const div = document.createElement("div");
+      div.className = "consulta";
+      div.innerHTML = `<strong>${escapeHtml(c.nombre)}:</strong> ${escapeHtml(c.comentario)}`;
+      cont.appendChild(div);
+    });
+  } catch (err) {
+    console.error(err);
+    document.getElementById("consultasContainer").textContent = "Error cargando consultas.";
+  }
+}
+
+// Enviar nueva consulta
+document.getElementById("formConsulta").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById("nombre").value.trim();
+  const comentario = document.getElementById("comentario").value.trim();
+  if (!nombre || !comentario) return;
+
+  const formData = new FormData();
+  formData.append("action", "añadir");
+  formData.append("nombre", nombre);
+  formData.append("comentario", comentario);
+
+  try {
+    const res = await fetch(GAS_URL_FORO, { method: "POST", body: formData });
+    const data = await res.json();
+    if (data.status === "OK") {
+      document.getElementById("nombre").value = "";
+      document.getElementById("comentario").value = "";
+      cargarConsultas();
+    } else {
+      alert("Error al enviar consulta: " + data.message);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Error enviando la consulta al servidor.");
+  }
+});
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "'")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// Carga inicial
+cargarConsultas();
+</script>
+
+</body>
+</html>
