@@ -388,7 +388,7 @@ document.getElementById("confirmarTertulia").addEventListener("click", () => {
 
 /* ---------- BORRAR TERTULIA ---------- */
 async function borrarTertulia(fila) {
-  if (!confirm("¿Estás seguro de que deseas borrar esta tertulia? Esta acción no se puede deshacer.")) return;
+  if (!confirm("¿Estás seguro de que deseas borrar esta tertulia?.")) return;
 
   const formData = new FormData();
   formData.append("action", "borrar");
