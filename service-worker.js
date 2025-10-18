@@ -1,7 +1,7 @@
 // ==== SERVICE WORKER ====
 
 // Nombre de la caché — cambia la versión para forzar actualización
-const CACHE_NAME = 'ateneo-cache-v1.0.1';
+const CACHE_NAME = 'ateneo-cache-v1.0.2';
 
 // Archivos que se cachearán
 const urlsToCache = [
