@@ -550,5 +550,58 @@ if ('serviceWorker' in navigator) {
 ">
   Versión v1.0.1
 </div>
+<!-- Contenedor del aviso de instalación -->
+<div id="installPrompt" style="
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: #2c3e50;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: none;
+    z-index: 10000;
+    align-items: center;
+">
+  <span>Instala la app Ateneo Realsitiense</span>
+  <button id="btnInstall" style="
+      margin-left: 10px;
+      background: #c0392b;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+  ">Instalar</button>
+</div>
+<script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installDiv = document.getElementById('installPrompt');
+  if (installDiv) installDiv.style.display = 'flex';
+});
+
+document.getElementById('btnInstall').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log('Resultado de la instalación:', outcome);
+
+  const installDiv = document.getElementById('installPrompt');
+  if (installDiv) installDiv.style.display = 'none';
+  deferredPrompt = null;
+});
+
+window.addEventListener('appinstalled', () => {
+  console.log('La PWA ha sido instalada');
+  const installDiv = document.getElementById('installPrompt');
+  if (installDiv) installDiv.style.display = 'none';
+});
+</script>
 </body>
 </html>
