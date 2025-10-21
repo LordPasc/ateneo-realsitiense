@@ -3,20 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <title>Ateneo Realsitiense</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 :root {
   --color-primario: #2c3e50;
   --color-secundario: #ecf0f1;
   --color-acento: #c0392b;
 }
-body { font-family: 'Segoe UI', sans-serif; margin:0; padding:0; color: var(--color-primario); background: var(--color-secundario); }
-header { background: var(--color-primario); color: #fff; padding: 1em; text-align: center; }
-.header-logo { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:1em; }
-.header-logo img { height:80px; width:auto; }
-nav { margin-top:0.5em; }
-nav a { margin:0 0.7em; color:#fff; text-decoration:none; font-weight:bold; }
-nav a:hover { color: var(--color-acento); }
+
+body { 
+  font-family: 'Segoe UI', sans-serif; 
+  margin:0; 
+  padding:0; 
+  color: var(--color-primario); 
+  background: var(--color-secundario); 
+}
+
+/* --- LOGO CENTRADO Y RESPONSIVE --- */
+.logo-principal {
+  display: block;           /* se comporta como bloque para centrar */
+  margin: 20px auto;        /* centrado horizontal y margen superior/inferior */
+  width: 50%;               /* ocupa la mitad del ancho del contenedor */
+  max-width: 250px;         /* no crece demasiado en pantallas grandes */
+  height: auto;             /* mantiene proporciones */
+}
+
+/* Ajustes móviles */
+@media (max-width: 600px) {
+  .logo-principal {
+    width: 70%;             /* ocupa más espacio en móviles */
+    max-width: 180px;       /* no se salga de la pantalla */
+    margin: 15px auto;      /* menos margen arriba/abajo */
+  }
+}
+
+/* Menú */
+#menu-cuerpo {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 15px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  flex-wrap: wrap;           /* para móviles, los enlaces se ajustan */
+}
+
+#menu-cuerpo a {
+  text-decoration: none;
+  color: orange;
+  font-size: 1.1rem;
+  transition: color 0.3s, transform 0.3s;
+}
+
+#menu-cuerpo a:hover {
+  color: #e67e22;
+  transform: scale(1.1);
+}
+
+/* Mantener todos los estilos existentes */
 main { padding:2em 1em; max-width:900px; margin:0 auto; background:#fff; box-shadow:0 0 10px rgba(0,0,0,0.05); border-radius:6px; }
 section { margin-bottom:2.5em; }
 h1,h2,h3 { font-family: Georgia, serif; }
@@ -38,25 +83,25 @@ footer a:hover { text-decoration:underline; color: var(--color-acento); }
 .modal-footer button { margin-left:10px; }
 #modalFoto img { max-width:100%; max-height:80vh; border-radius:10px; }
 </style>
-<link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
 </head>
+
+
 <body>
 
-<header>
-  <div class="header-logo">
-    <img src="logo.jpg" alt="Logo Ateneo Realsitiense">
-    <h1>Ateneo Realsitiense</h1>
-  </div>
-  <nav>
-    <a href="#tertulias">Tertulias</a>
-    <a href="#nosotros">Quiénes somos</a>
-    <a href="#foro">Foro</a> 
-    <a href="#contacto">Contacto</a>
-  </nav>
-</header>
+
+<!-- Logo centrado y reducido -->
+<img src="logo_old1.jpg" alt="Logo Ateneo Realsitiense" class="logo-principal">
+
+<!-- Menú -->
+<div id="menu-cuerpo">
+  <a href="#tertulias">Tertulias</a>
+  <a href="#nosotros">Quiénes somos</a>
+  <a href="#foro">Foro</a>
+  <a href="#contacto">Contacto</a>
+</div>
 
 <main>
+    <div id="contenedorCerrarSesion" style="display:flex; justify-content:flex-end; margin-bottom:1em;"></div>
   <section id="hero">
     <h2>Próxima tertulia</h2>
     <div id="mensaje">Cargando tertulias...</div>
@@ -249,15 +294,17 @@ function inicializarApp(rol) {
   ocultarLogin();
   mostrarBotonesSegunRol(rol);
   cargarTertulias();
+
   if (!document.getElementById("btnCerrarSesion")) {
     const btnCerrar = document.createElement("button");
     btnCerrar.textContent = "Cerrar sesión";
     btnCerrar.className = "button";
     btnCerrar.id = "btnCerrarSesion";
-    btnCerrar.style.marginLeft = "10px";
     btnCerrar.addEventListener("click", cerrarSesion);
-    const headerDiv = document.querySelector("header .header-logo") || document.querySelector("header");
-    if (headerDiv) headerDiv.appendChild(btnCerrar);
+
+    // Añadir el botón al contenedor dentro del main
+    const contenedor = document.getElementById("contenedorCerrarSesion");
+    if (contenedor) contenedor.appendChild(btnCerrar);
   }
 }
 
