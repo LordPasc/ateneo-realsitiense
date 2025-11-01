@@ -7,9 +7,9 @@
 
 <style>
 :root {
-  --color-primario: #2c3e50;
-  --color-secundario: #ecf0f1;
-  --color-acento: #c0392b;
+  --color-primario: #2c3e50; /* Azul oscuro */
+  --color-secundario: #ecf0f1; /* Gris muy claro */
+  --color-acento: #c0392b; /* Rojo ladrillo */
 }
 
 /* === RESETEO Y BASE === */
@@ -18,7 +18,33 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background: #e8f5e9;
+  background: #e8f5e9; /* Tono verde muy suave */
+  /* Asegura que padding y border se incluyan en el ancho y alto total */
+  box-sizing: border-box; 
+}
+
+body { 
+  font-family: 'Segoe UI', sans-serif; 
+  color: var(--color-primario); 
+}
+
+/* === ENCABEZADO Y LOGO === */
+#main-header {
+  background-color: #1d4c9c; /* Azul oscuro/marino */
+  overflow: hidden;
+  padding: 10px 0; /* Un poco de padding vertical */
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header img.logo-principal {
+  display: block;
+  margin: 0 auto;
+  width: 240px;
+  height: auto;
+  max-width: 90%; /* Mejor adaptabilidad para que no se salga */
 }
 
 /* Bloque centrado del título */
@@ -35,19 +61,6 @@ html, body {
   color: var(--color-primario);
   font-family: Georgia, serif;
   font-size: 1.6em;
-}
-
-body { 
-  font-family: 'Segoe UI', sans-serif; 
-  color: var(--color-primario); 
-}
-
-header img.logo-principal {
-  display: block;
-  margin: 0 auto 10px auto;
-  width: 240px;
-  height: auto;
-  max-width: 80%;
 }
 
 /* === MENÚ PRINCIPAL === */
@@ -72,14 +85,12 @@ header img.logo-principal {
   transform: scale(1.1);
 }
 
-/* === CONTENIDO PRINCIPAL SIN MARCOS === */
+/* === CONTENIDO PRINCIPAL === */
 main {
-  padding: 2em 3%;
-  margin: 0;
-  max-width: 100%;
+  padding: 2em 5%; /* Aumentamos el padding lateral para móvil */
+  margin: 0 auto;
+  max-width: 1200px; /* Limita el ancho en escritorio */
   background: transparent;
-  box-shadow: none;
-  border-radius: 0;
 }
 
 /* === SECCIONES Y TEXTOS === */
@@ -106,6 +117,7 @@ a.button, button {
   border-radius: 4px; 
   border: none; 
   cursor: pointer; 
+  font-size: 1em; /* Aseguramos que el tamaño sea legible */
 }
 a.button:hover, button:hover { background: #96281b; }
 
@@ -162,7 +174,8 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 .modal-footer button { margin-left: 10px; }
 #modalFoto img { max-width: 100%; max-height: 80vh; border-radius: 10px; }
 
-/* === NUEVO: BLOQUE SECCIONES HORIZONTALES === */
+
+/* === BLOQUE SECCIONES HORIZONTALES (Adaptabilidad clave) === */
 #bloque-h-secciones {
   display: flex;
   gap: 30px;
@@ -178,7 +191,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   padding: 1.6em 1.4em;
   min-width: 240px;
   max-width: 355px;
-  flex: 1 1 300px;
+  flex: 1 1 300px; /* Permite que crezca y encoja */
   box-sizing: border-box;
   margin: 0 0 1em 0;
   box-shadow: 0 2px 10px rgba(44,62,80,0.06);
@@ -187,21 +200,11 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   align-items: start;
 }
 
-@media (max-width: 900px) {
-  #bloque-h-secciones {
-    flex-direction: column;
-    align-items: center;
-    gap: 18px;
-  }
-  .bloque-seccion {
-    width: 96vw;
-    max-width: 500px;
-    min-width: unset;
-  }
-}
+/* === TABLA Y BOTONES TERTULIAS === */
+
 .tabla-wrapper {
   margin-top: 20px;
-  overflow-x: auto;
+  overflow-x: auto; /* Permite scroll horizontal si la tabla es ancha */
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   background: #fff;
@@ -212,6 +215,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   border-collapse: collapse;
   text-align: left;
   font-family: 'Segoe UI', sans-serif;
+  min-width: 500px; /* Asegura un ancho mínimo en móvil para scroll */
 }
 
 #tabla-tertulias th, #tabla-tertulias td {
@@ -220,7 +224,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 }
 
 #tabla-tertulias th {
-  background-color: #4caf50; /* verde profesional */
+  background-color: #4caf50;
   color: white;
   font-weight: 600;
 }
@@ -230,7 +234,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 }
 
 #tabla-tertulias tr:hover {
-  background-color: #f1f8e9; /* tono verde claro al pasar el ratón */
+  background-color: #f1f8e9;
 }
 
 #tabla-tertulias img {
@@ -246,12 +250,14 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   flex-wrap: wrap;
   margin-top: 15px;
 }
+
+/* === TARJETAS TERTULIAS (Adaptabilidad clave) === */
 .tertulia-flex-container {
   display: flex;
   flex-wrap: wrap;
   gap: 22px;
   margin-top: 16px;
-  justify-content: flex-start;
+  justify-content: center; /* Centrar tarjetas */
 }
 .tertulia-card {
   background: #fff;
@@ -259,13 +265,13 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   box-shadow: 0 4px 14px rgba(44,62,80,0.09);
   border: 1.5px solid #eee;
   padding: 18px 22px 18px 18px;
-  min-width: 220px;
+  min-width: 260px;
   max-width: 360px;
   flex: 1 1 260px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 15px;
+  margin-bottom: 5px; /* Reducido para mejor compactación */
   transition: box-shadow 0.2s;
 }
 .tertulia-card:hover {
@@ -282,21 +288,45 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 .tertulia-card .fecha { color: #2c3e50d0; font-size: 1em; margin-bottom: 10px;}
 .tertulia-card .ver-mas { color: var(--color-acento); text-decoration: underline; font-weight: 600; font-size: 0.97em; background: none; border: none; cursor: pointer; padding: 0; margin-top: 4px; transition: color 0.13s;}
 .tertulia-card .ver-mas:hover { color: #96281b; }
-@media (max-width: 850px) {
-  .tertulia-flex-container { flex-direction:column; gap:14px; align-items:center; }
-  .tertulia-card { width:96vw; max-width:500px; min-width:unset; }
+
+/* ======================================= */
+/* === MEDIA QUERIES (PARA ADAPTAR A MÓVIL) === */
+/* ======================================= */
+@media (max-width: 900px) {
+  /* Adapta el bloque de 3 secciones (Quiénes somos, Foro, Contacto) */
+  #bloque-h-secciones {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .bloque-seccion {
+    width: 90%; /* Ancho más controlado */
+    max-width: 500px;
+    min-width: unset;
+  }
+
+  /* Adapta las tarjetas de tertulias */
+  .tertulia-flex-container { 
+    flex-direction: column; 
+    gap: 14px; 
+    align-items: center; 
+  }
+  .tertulia-card { 
+    width: 90%; 
+    max-width: 500px; 
+    min-width: unset; 
+  }
 }
 
-#main-header {
-  background-color: #1d4c9c; /* nuevo color solicitado */
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@media (max-width: 500px) {
+    /* Ajustes adicionales para pantallas muy pequeñas */
+    main {
+        padding: 1.5em 3%; /* Menos padding en los lados */
+    }
+    .titulo-seccion {
+        font-size: 1.4em;
+    }
 }
-
 </style>
 </head>
 
