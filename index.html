@@ -19,7 +19,6 @@ html, body {
   width: 100%;
   height: 100%;
   background: #e8f5e9; /* Tono verde muy suave */
-  /* Asegura que padding y border se incluyan en el ancho y alto total */
   box-sizing: border-box; 
 }
 
@@ -28,24 +27,27 @@ body {
   color: var(--color-primario); 
 }
 
-/* === ENCABEZADO Y LOGO === */
+/* === ENCABEZADO Y LOGO (CORRECCIÓN DESBORDAMIENTO) === */
 #main-header {
-  background-color: #1d4c9c; /* Azul oscuro/marino */
+  background-color: #1d4c9c;
   overflow: hidden;
-  padding: 10px 0; /* Un poco de padding vertical */
+  padding: 10px 0;
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-header img.logo-principal {
+/* *** CORRECCIÓN CLAVE PARA EL DESBORDAMIENTO *** */
+#main-header img { 
   display: block;
   margin: 0 auto;
   width: 240px;
   height: auto;
-  max-width: 90%; /* Mejor adaptabilidad para que no se salga */
+  max-width: 90%; /* Asegura que la imagen no exceda el 90% del ancho del contenedor */
 }
+/* ************************************************* */
+
 
 /* Bloque centrado del título */
 .titulo-contenedor {
@@ -87,9 +89,9 @@ header img.logo-principal {
 
 /* === CONTENIDO PRINCIPAL === */
 main {
-  padding: 2em 5%; /* Aumentamos el padding lateral para móvil */
+  padding: 2em 5%;
   margin: 0 auto;
-  max-width: 1200px; /* Limita el ancho en escritorio */
+  max-width: 1200px;
   background: transparent;
 }
 
@@ -117,7 +119,7 @@ a.button, button {
   border-radius: 4px; 
   border: none; 
   cursor: pointer; 
-  font-size: 1em; /* Aseguramos que el tamaño sea legible */
+  font-size: 1em;
 }
 a.button:hover, button:hover { background: #96281b; }
 
@@ -175,7 +177,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 #modalFoto img { max-width: 100%; max-height: 80vh; border-radius: 10px; }
 
 
-/* === BLOQUE SECCIONES HORIZONTALES (Adaptabilidad clave) === */
+/* === BLOQUE SECCIONES HORIZONTALES === */
 #bloque-h-secciones {
   display: flex;
   gap: 30px;
@@ -191,7 +193,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   padding: 1.6em 1.4em;
   min-width: 240px;
   max-width: 355px;
-  flex: 1 1 300px; /* Permite que crezca y encoja */
+  flex: 1 1 300px;
   box-sizing: border-box;
   margin: 0 0 1em 0;
   box-shadow: 0 2px 10px rgba(44,62,80,0.06);
@@ -204,7 +206,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 
 .tabla-wrapper {
   margin-top: 20px;
-  overflow-x: auto; /* Permite scroll horizontal si la tabla es ancha */
+  overflow-x: auto;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   background: #fff;
@@ -215,7 +217,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   border-collapse: collapse;
   text-align: left;
   font-family: 'Segoe UI', sans-serif;
-  min-width: 500px; /* Asegura un ancho mínimo en móvil para scroll */
+  min-width: 500px;
 }
 
 #tabla-tertulias th, #tabla-tertulias td {
@@ -251,13 +253,13 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   margin-top: 15px;
 }
 
-/* === TARJETAS TERTULIAS (Adaptabilidad clave) === */
+/* === TARJETAS TERTULIAS (CORRECCIÓN ESPACIO BLANCO) === */
 .tertulia-flex-container {
   display: flex;
   flex-wrap: wrap;
   gap: 22px;
   margin-top: 16px;
-  justify-content: center; /* Centrar tarjetas */
+  justify-content: center;
 }
 .tertulia-card {
   background: #fff;
@@ -271,7 +273,10 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 5px; /* Reducido para mejor compactación */
+  /* Eliminamos el margin-bottom para reducir el espacio */
+  margin-bottom: 0; 
+  /* Agregamos min-height para que todas se vean uniformes, pero bajo control */
+  min-height: 120px; 
   transition: box-shadow 0.2s;
 }
 .tertulia-card:hover {
@@ -282,25 +287,36 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   font-size: 1.14em;
   font-weight: 600;
   color: var(--color-primario);
-  margin-bottom: 8px;
+  margin-bottom: 5px; /* Reducido de 8px a 5px */
 }
 .tertulia-card .tema { font-style: italic; color: #328ad6; }
-.tertulia-card .fecha { color: #2c3e50d0; font-size: 1em; margin-bottom: 10px;}
-.tertulia-card .ver-mas { color: var(--color-acento); text-decoration: underline; font-weight: 600; font-size: 0.97em; background: none; border: none; cursor: pointer; padding: 0; margin-top: 4px; transition: color 0.13s;}
+.tertulia-card .fecha { color: #2c3e50d0; font-size: 1em; margin-bottom: 5px;} /* Reducido de 10px a 5px */
+.tertulia-card .ver-mas { 
+    color: var(--color-acento); 
+    text-decoration: underline; 
+    font-weight: 600; 
+    font-size: 0.97em; 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    padding: 0; 
+    margin-top: 4px; 
+    transition: color 0.13s;
+}
 .tertulia-card .ver-mas:hover { color: #96281b; }
 
 /* ======================================= */
 /* === MEDIA QUERIES (PARA ADAPTAR A MÓVIL) === */
 /* ======================================= */
 @media (max-width: 900px) {
-  /* Adapta el bloque de 3 secciones (Quiénes somos, Foro, Contacto) */
+  /* Adapta el bloque de 3 secciones */
   #bloque-h-secciones {
     flex-direction: column;
     align-items: center;
     gap: 18px;
   }
   .bloque-seccion {
-    width: 90%; /* Ancho más controlado */
+    width: 90%;
     max-width: 500px;
     min-width: unset;
   }
@@ -321,7 +337,7 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
 @media (max-width: 500px) {
     /* Ajustes adicionales para pantallas muy pequeñas */
     main {
-        padding: 1.5em 3%; /* Menos padding en los lados */
+        padding: 1.5em 3%;
     }
     .titulo-seccion {
         font-size: 1.4em;
