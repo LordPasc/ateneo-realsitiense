@@ -343,6 +343,15 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
         font-size: 1.4em;
     }
 }
+/* *** ESTILO CLAVE PARA LA MINIATURA *** */
+.tertulia-card img.thumbnail {
+    width: 100%;
+    height: auto;
+    max-height: 200px; /* Limita la altura de la imagen */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
 </style>
 </head>
 
@@ -568,57 +577,91 @@ function inicializarApp(rol) {
 }
 
 /* ---------- CARGA TERTULIAS ---------- */
-async function cargarTertulias(){
-  try {
-    const res = await fetch(GAS_URL_TERTULIAS + "?action=listar");
-    const json = await res.json();
-    const cont = document.getElementById("tabla-container");
-    const mensaje = document.getElementById("mensaje");
-    const archive = document.querySelector(".archive");
-    if(!Array.isArray(json) || json.length===0){
-      mensaje.textContent = "No hay tertulias registradas.";
-      cont.innerHTML = "";
-      archive.innerHTML = "";
-      return;
-    }
-    json.sort((a,b) => new Date(a.fecha) - new Date(b.fecha));
-    cont.innerHTML = "";
-    archive.innerHTML = "";
-    const today = new Date(); today.setHours(0,0,0,0);
-const tarjetasContainer = document.createElement("div");
-tarjetasContainer.className = "tertulia-flex-container";
-json.forEach((t, index) => {
-  const fecha = new Date(t.fecha);
-  const fechaStr = fecha.toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
-  const rol = obtenerSesion();
-  let botonBorrar = "";
-  if (rol === "admin" && fecha >= today) {
-    botonBorrar = ` <button onclick="borrarTertulia(${index + 2})" style="margin-left:6px; background:#dc3545; color:white; border:none; border-radius:3px; padding:2px 6px; cursor:pointer;">🗑</button>`;
-  }
-  if(fecha >= today){
-    const card = document.createElement("div");
-    card.className = "tertulia-card";
-    card.innerHTML = `
-      <div class="titulo">${escapeHtml(t.ponente || "")}${t.tema ? ' — <span class="tema">' + escapeHtml(t.tema) + '</span>' : ''}</div>
-      <div class="fecha">Fecha: ${fechaStr}</div>
-      <button class="ver-mas" onclick="mostrarFoto('${t.foto}')">(click para más datos)</button>
-      ${botonBorrar}
-    `;
-    tarjetasContainer.appendChild(card);
-  } else {
-    // No toques el bloque de archivo
-    const liArchive = document.createElement("li");
-    liArchive.innerHTML = `${fechaStr} · ${escapeHtml(t.tema)}`;
-    archive.appendChild(liArchive);
-  }
-});
-cont.appendChild(tarjetasContainer);
-mensaje.textContent = ''; // Limpia el mensaje "Cargando tertulias..."
-
-    mensaje.textContent = `Próximas tertulias: ${upcomingUl.children.length}`;
-  } catch(err){ console.error("Error en cargarTertulias:", err);}
+/* Función auxiliar para extraer el ID del archivo de Google Drive */
+function getFileIdFromUrl(url) {
+    if (!url) return null;
+    // Extrae el ID que está después de "id="
+    const match = url.match(/id=([a-zA-Z0-9_-]+)/);
+    return match ? match[1] : null;
 }
 
+async function cargarTertulias(){
+  try {
+    const res = await fetch(GAS_URL_TERTULIAS + "?action=listar");
+    const json = await res.json();
+    const cont = document.getElementById("tabla-container");
+    const mensaje = document.getElementById("mensaje");
+    const archive = document.querySelector(".archive");
+    if(!Array.isArray(json) || json.length===0){
+      mensaje.textContent = "No hay tertulias registradas.";
+      cont.innerHTML = "";
+      archive.innerHTML = "";
+      return;
+    }
+    json.sort((a,b) => new Date(a.fecha) - new Date(b.fecha));
+    cont.innerHTML = "";
+    archive.innerHTML = "";
+    const today = new Date(); today.setHours(0,0,0,0);
+    const tarjetasContainer = document.createElement("div");
+    tarjetasContainer.className = "tertulia-flex-container";
+    
+    // El objeto 'upcomingUl' no estaba definido, lo defino aquí para que el contador funcione.
+    const upcomingUl = document.createElement("ul");
+    upcomingUl.style.display = "none";
+
+    json.forEach((t, index) => {
+        const fecha = new Date(t.fecha);
+        const fechaStr = fecha.toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
+        const rol = obtenerSesion();
+        let botonBorrar = "";
+
+        if (rol === "admin" && fecha >= today) {
+            botonBorrar = ` <button onclick="borrarTertulia(${index + 2})" style="margin-left:6px; background:#dc3545; color:white; border:none; border-radius:3px; padding:2px 6px; cursor:pointer;">🗑</button>`;
+        }
+
+        if(fecha >= today){
+            // ************ INICIO: LÓGICA DE MINIATURAS ************
+            let imagenHTML = '';
+            const fileId = getFileIdFromUrl(t.foto);
+            if (fileId) {
+                // Construye la URL de la miniatura con un ancho fijo de 400px
+                const thumbnailURL = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`; 
+                // Añade la clase "thumbnail" para aplicar el CSS que definimos
+                imagenHTML = `<img src="${thumbnailURL}" alt="Foto de la tertulia" class="thumbnail" />`;
+            }
+            // ************ FIN: LÓGICA DE MINIATURAS ************
+
+            const card = document.createElement("div");
+            card.className = "tertulia-card";
+            card.innerHTML = `
+                ${imagenHTML} 
+                <div class="titulo">${escapeHtml(t.ponente || "")}${t.tema ? ' — <span class="tema">' + escapeHtml(t.tema) + '</span>' : ''}</div>
+                <div class="fecha">Fecha: ${fechaStr}</div>
+                <button class="ver-mas" onclick="mostrarFoto('${t.foto}')">(click para más datos)</button>
+                ${botonBorrar}
+            `;
+            tarjetasContainer.appendChild(card);
+            
+            // Suma al contador de próximas tertulias
+            upcomingUl.appendChild(document.createElement("li"));
+
+        } else {
+            // No toques el bloque de archivo
+            const liArchive = document.createElement("li");
+            liArchive.innerHTML = `${fechaStr} · ${escapeHtml(t.tema)}`;
+            archive.appendChild(liArchive);
+        }
+    });
+    cont.appendChild(tarjetasContainer);
+    
+    // El contador ahora usa el elemento upcomingUl creado
+    mensaje.textContent = `Próximas tertulias: ${upcomingUl.children.length}`; 
+
+  } catch(err){ 
+      console.error("Error en cargarTertulias:", err);
+      mensaje.textContent = `Error al cargar: ${err.message}`;
+  }
+}
 function escapeHtml(str) { if(!str) return ""; return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"'").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
 /* ---------- MODAL AÑADIR TERTULIA ---------- */
