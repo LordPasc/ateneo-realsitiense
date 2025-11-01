@@ -620,16 +620,20 @@ async function cargarTertulias(){
         }
 
         if(fecha >= today){
-            // ************ INICIO: LÓGICA DE MINIATURAS ************
+            // ************ INICIO: LÓGICA DE MINIATURAS ENLAZADAS ************
             let imagenHTML = '';
-            const fileId = getFileIdFromUrl(t.foto);
+            const fileId = getFileIdFromUrl(t.foto); // Usamos tu función para obtener el ID
+            
             if (fileId) {
-                // Construye la URL de la miniatura con un ancho fijo de 400px
+                // 1. Crea la URL de la miniatura
                 const thumbnailURL = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`; 
-                // Añade la clase "thumbnail" para aplicar el CSS que definimos
-                imagenHTML = `<img src="${thumbnailURL}" alt="Foto de la tertulia" class="thumbnail" />`;
+                const imageTag = `<img src="${thumbnailURL}" alt="Foto de la tertulia" class="thumbnail" />`;
+                
+                // 2. Envuelve la miniatura en el enlace al archivo original
+                // Al hacer clic en la imagen, se abrirá t.foto en una nueva pestaña
+                imagenHTML = `<a href="${t.foto}" target="_blank">${imageTag}</a>`;
             }
-            // ************ FIN: LÓGICA DE MINIATURAS ************
+            // ************ FIN: LÓGICA DE MINIATURAS ENLAZADAS ************
 
             const card = document.createElement("div");
             card.className = "tertulia-card";
@@ -637,16 +641,17 @@ async function cargarTertulias(){
                 ${imagenHTML} 
                 <div class="titulo">${escapeHtml(t.ponente || "")}${t.tema ? ' — <span class="tema">' + escapeHtml(t.tema) + '</span>' : ''}</div>
                 <div class="fecha">Fecha: ${fechaStr}</div>
-                <button class="ver-mas" onclick="mostrarFoto('${t.foto}')">(click para más datos)</button>
-                ${botonBorrar}
-            `;
+                
+                ${botonBorrar} 
+            `; // *** El botón "click para más datos" se ha ELIMINADO ***
+            
             tarjetasContainer.appendChild(card);
             
-            // Suma al contador de próximas tertulias
+            // Suma al contador
             upcomingUl.appendChild(document.createElement("li"));
 
         } else {
-            // No toques el bloque de archivo
+            // Bloque de archivo (sin cambios)
             const liArchive = document.createElement("li");
             liArchive.innerHTML = `${fechaStr} · ${escapeHtml(t.tema)}`;
             archive.appendChild(liArchive);
@@ -654,7 +659,7 @@ async function cargarTertulias(){
     });
     cont.appendChild(tarjetasContainer);
     
-    // El contador ahora usa el elemento upcomingUl creado
+    // Actualiza el mensaje del contador
     mensaje.textContent = `Próximas tertulias: ${upcomingUl.children.length}`; 
 
   } catch(err){ 
