@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ateneo Realsitiense</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root {
+  --color-primario: #2c3e50;
+  --color-secundario: #ecf0f1;
+  --color-acento: #c0392b;
+}
+
+/* === RESETEO Y BASE === */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #e8f5e9;
+}
+
+/* Bloque centrado del título */
+.titulo-contenedor {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+/* Subrayado solo bajo las letras */
+.titulo-seccion {
+  display: inline-block;
+  border-bottom: 2px solid var(--color-acento);
+  padding-bottom: 5px;
+  color: var(--color-primario);
+  font-family: Georgia, serif;
+  font-size: 1.6em;
+}
+
+body { 
+  font-family: 'Segoe UI', sans-serif; 
+  color: var(--color-primario); 
+}
+
+header img.logo-principal {
+  display: block;
+  margin: 0 auto 10px auto;
+  width: 240px;
+  height: auto;
+  max-width: 80%;
+}
+
+/* === MENÚ PRINCIPAL === */
+#menu-cuerpo {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin-top: 10px;
+}
+
+#menu-cuerpo a {
+  text-decoration: none;
+  color: #f39c12;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color 0.3s, transform 0.3s;
+}
+
+#menu-cuerpo a:hover {
+  color: #f1c40f;
+  transform: scale(1.1);
+}
+
+/* === CONTENIDO PRINCIPAL SIN MARCOS === */
+main {
+  padding: 2em 3%;
+  margin: 0;
+  max-width: 100%;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* === SECCIONES Y TEXTOS === */
+section { margin-bottom: 2.5em; }
+h1,h2,h3 { font-family: Georgia, serif; }
+h2 { 
+  border-bottom: 2px solid var(--color-acento); 
+  padding-bottom: 0.3em; 
+  color: var(--color-primario); 
+}
+.calendar, .archive { list-style: none; padding: 0; }
+.calendar li, .archive li { margin: 0.5em 0; }
+.board ul { list-style: none; padding: 0; }
+.board li { margin: 0.3em 0; }
+
+/* === BOTONES === */
+a.button, button { 
+  display: inline-block; 
+  margin-top: 1em; 
+  padding: 0.5em 1em; 
+  background: var(--color-acento); 
+  color: #fff; 
+  text-decoration: none; 
+  border-radius: 4px; 
+  border: none; 
+  cursor: pointer; 
+}
+a.button:hover, button:hover { background: #96281b; }
+
+/* === ELEMENTOS VARIOS === */
+.more { 
+  font-weight: normal; 
+  font-size: 0.9em; 
+  opacity: 0.8; 
+  cursor: pointer; 
+  color: var(--color-acento);
+}
+
+/* === PIE DE PÁGINA === */
+footer { 
+  background: var(--color-primario); 
+  color: #fff; 
+  text-align: center; 
+  padding: 1em; 
+  margin-top: 2em; 
+}
+footer a { color: #ecf0f1; text-decoration: none; margin: 0 5px; }
+footer a:hover { text-decoration: underline; color: var(--color-acento); }
+
+/* === MODALES === */
+.modal { 
+  display: none; 
+  position: fixed; 
+  z-index: 10000; 
+  left: 0; top: 0; 
+  width: 100%; height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.6); 
+  justify-content: center; 
+  align-items: center; 
+}
+.modal-content { 
+  background-color: #fff; 
+  margin: auto; 
+  padding: 20px; 
+  border-radius: 10px; 
+  width: 90%; 
+  max-width: 400px; 
+  box-shadow: 0 0 10px var(--color-acento); 
+  position: relative; 
+}
+.modal-content label, .modal-content input { 
+  display: block; 
+  width: 100%; 
+  margin-bottom: 15px; 
+  font-size: 1em; 
+  box-sizing: border-box; 
+}
+.modal-footer { text-align: right; }
+.modal-footer button { margin-left: 10px; }
+#modalFoto img { max-width: 100%; max-height: 80vh; border-radius: 10px; }
+
+/* === NUEVO: BLOQUE SECCIONES HORIZONTALES === */
+#bloque-h-secciones {
+  display: flex;
+  gap: 30px;
+  margin: 2em 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bloque-seccion {
+  background: var(--color-secundario);
+  border: 2px solid var(--color-acento);
+  border-radius: 12px;
+  padding: 1.6em 1.4em;
+  min-width: 240px;
+  max-width: 355px;
+  flex: 1 1 300px;
+  box-sizing: border-box;
+  margin: 0 0 1em 0;
+  box-shadow: 0 2px 10px rgba(44,62,80,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  #bloque-h-secciones {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .bloque-seccion {
+    width: 96vw;
+    max-width: 500px;
+    min-width: unset;
+  }
+}
+.tabla-wrapper {
+  margin-top: 20px;
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+#tabla-tertulias {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+#tabla-tertulias th, #tabla-tertulias td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+#tabla-tertulias th {
+  background-color: #4caf50; /* verde profesional */
+  color: white;
+  font-weight: 600;
+}
+
+#tabla-tertulias tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#tabla-tertulias tr:hover {
+  background-color: #f1f8e9; /* tono verde claro al pasar el ratón */
+}
+
+#tabla-tertulias img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.botones-tertulias {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+.tertulia-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 16px;
+  justify-content: flex-start;
+}
+.tertulia-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(44,62,80,0.09);
+  border: 1.5px solid #eee;
+  padding: 18px 22px 18px 18px;
+  min-width: 220px;
+  max-width: 360px;
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  transition: box-shadow 0.2s;
+}
+.tertulia-card:hover {
+  box-shadow: 0 7px 24px rgba(192,57,43,0.09);
+}
+.tertulia-card .titulo {
+  font-family: 'Garamond', Georgia, serif;
+  font-size: 1.14em;
+  font-weight: 600;
+  color: var(--color-primario);
+  margin-bottom: 8px;
+}
+.tertulia-card .tema { font-style: italic; color: #328ad6; }
+.tertulia-card .fecha { color: #2c3e50d0; font-size: 1em; margin-bottom: 10px;}
+.tertulia-card .ver-mas { color: var(--color-acento); text-decoration: underline; font-weight: 600; font-size: 0.97em; background: none; border: none; cursor: pointer; padding: 0; margin-top: 4px; transition: color 0.13s;}
+.tertulia-card .ver-mas:hover { color: #96281b; }
+@media (max-width: 850px) {
+  .tertulia-flex-container { flex-direction:column; gap:14px; align-items:center; }
+  .tertulia-card { width:96vw; max-width:500px; min-width:unset; }
+}
+
+#main-header {
+  background-color: #1d4c9c; /* nuevo color solicitado */
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+</style>
+</head>
+
+<body>
+<header id="main-header">
+  <img src="logo_old1.jpg" alt="Logo Ateneo Realsitiense" />
+</header>
+
+<main>
+<section id="hero">
+  <div class="titulo-contenedor">
+    <h2 class="titulo-seccion">Próximos eventos</h2>
+  </div>
+
+  <div id="mensaje">Cargando tertulias...</div>
+
+<!-- Aquí irá la lista generada automáticamente -->
+<div id="tabla-container"></div>
+
+
+  <div class="botones-tertulias">
+    <a href="calendario.html" target="_blank" rel="noopener noreferrer" class="button">Ver calendario completo</a>
+    <button id="btnAbrirModal" class="button">➕ Añadir tertulia</button>
+  </div>
+</section>
+
+
+    <!-- NUEVO BLOQUE FLEXIBLE -->
+  <div id="bloque-h-secciones">
+    <section id="nosotros" class="bloque-seccion">
+      <h2>Quiénes somos</h2>
+      <div class="board">
+        <ul>
+          <li><strong>Presidente:</strong> José Tomás Castillo</li>
+          <li><strong>Vicepresidente:</strong> Rafael Luis Gómez</li>
+          <li><strong>Secretaria/Tesorera:</strong> Margarita de Blas</li>
+        </ul>
+      </div>
+      <h3>Estatutos</h3>
+      <p><a href="estatutos.pdf" target="_blank">Descarga los estatutos (PDF)</a></p>
+      <div style="margin-top:1em;">
+        <button id="btnGaleria" class="button">📸 Galería fotográfica</button>
+        <button id="btnAñadirFoto" class="button">➕ Añadir fotos</button>
+      </div>
+    </section>
+    <section id="foro" class="bloque-seccion">
+      <h2>Foro</h2>
+      <p>Espacio de discusión para los miembros del Ateneo y tertulianos.</p>
+      <a href="foro.html" target="_blank" class="button">Acceso al foro</a>
+    </section>
+    <section id="contacto" class="bloque-seccion">
+      <h2>Contacto y socio</h2>
+      <p>Formulario de contacto aquí o escríbenos a <a href="mailto:ateneorealsitiense@gmail.com">ateneorealsitiense@gmail.com</a></p>
+      <h3>Hazte socio</h3>
+      <p>Cuota anual: 20 €. Incluye acceso a tertulias, archivo y boletines.</p>
+    </section>
+  </div>
+  <!-- FIN BLOQUE FLEXIBLE -->
+<section id="tertulias">
+    <h2>Archivo de sesiones pasadas</h2>
+    <ul class="archive"></ul>
+  </section>
+</main>
+
+<!-- Modal Añadir Tertulia -->
+<div id="modalTertulia" class="modal">
+  <div class="modal-content">
+    <h3>Añadir tertulia</h3>
+    <label for="input-tema">Tema:</label>
+    <input type="text" id="input-tema" placeholder="Introduce el tema" />
+    <label for="input-fecha">Fecha:</label>
+    <input type="date" id="input-fecha" />
+    <label for="input-foto">Foto (opcional):</label>
+    <input type="file" id="input-foto" accept="image/*" />
+    <div class="modal-footer">
+      <button id="cancelarTertulia">Cancelar</button>
+      <button id="confirmarTertulia">Guardar</button>
+      <div id="loadingTertulia" style="display:none; color: var(--color-acento); font-weight: bold; margin-top: 10px;">Cargando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Añadir Fotos -->
+<div id="modalFotos" class="modal">
+  <div class="modal-content">
+    <h3>Añadir fotos</h3>
+    <label for="input-fotos">Selecciona una o varias fotos:</label>
+    <input type="file" id="input-fotos" accept="image/*" multiple />
+    <div class="modal-footer">
+      <button id="cancelarFotos">Cancelar</button>
+      <button id="confirmarFotos">Subir</button>
+      <div id="loadingFotos" style="display:none; color: var(--color-acento); font-weight: bold; margin-top: 10px;">Cargando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Foto individual -->
+<div id="modalFoto" class="modal" style="display:none; align-items:center; justify-content:center;">
+  <div class="modal-content">
+    <span style="position:absolute; top:10px; right:10px; cursor:pointer;" onclick="cerrarModalFoto()">✕</span>
+    <img id="imagenModal" src="" alt="Foto de tertulia"/>
+  </div>
+</div>
+
+<!-- Modal Login -->
+<div id="modalLogin" class="modal" style="display:flex; justify-content:center; align-items:center;">
+  <div class="modal-content" style="max-width:200px;">
+    <h3>Iniciar sesión</h3>
+    <label for="usuarioLogin">Usuario</label>
+    <input type="text" id="usuarioLogin" autocomplete="username" />
+    <label for="passwordLogin">Contraseña</label>
+    <input type="password" id="passwordLogin" autocomplete="current-password" />
+    <div class="modal-footer" style="text-align:right;">
+      <button id="cancelarLogin">Cancelar</button>
+      <button id="aceptarLogin">Entrar</button>
+      <button id="entrarInvitado">ACCESO TERTULIANOS</button>
+    </div>
+    <p id="errorLogin"></p>
+  </div>
+</div>
+
+
+<footer>
+  <p>
+    Ateneo Realsitiense – ©2025 – 
+    <a href="aviso-legal.html" target="_blank">Aviso legal</a> | 
+    <a href="privacidad.html" target="_blank">Política de privacidad</a> | 
+    <a href="cookies.html" target="_blank">Política de cookies</a>
+  </p>
+  <div id="contenedorCerrarSesion" style="display:flex; justify-content:flex-end; margin-bottom:1em;"></div>
+</footer>
+
+<script>
+const GAS_URL_TERTULIAS = "https://script.google.com/macros/s/AKfycby_mTcYuKvpuKZbjbjpDOuv5eFwXIEiER6LCs_GCXjhZJRdFa4eA9kMzG0IQaiBKxIzIw/exec";
+
+/* Login y control de roles */
+function mostrarBotonesSegunRol(rol) {
+  const esAdmin = (rol === "admin");
+  const btnAddTertulia = document.getElementById("btnAbrirModal");
+  const btnAddFoto = document.getElementById("btnAñadirFoto");
+  if (!esAdmin) {
+    if(btnAddTertulia) btnAddTertulia.style.display = "none";
+    if(btnAddFoto) btnAddFoto.style.display = "none";
+  } else {
+    if(btnAddTertulia) btnAddTertulia.style.display = "inline-block";
+    if(btnAddFoto) btnAddFoto.style.display = "inline-block";
+  }
+}
+
+function mostrarLogin() {
+  const modal = document.getElementById("modalLogin");
+  modal.style.display = "flex";
+}
+
+function ocultarLogin() {
+  const modal = document.getElementById("modalLogin");
+  modal.style.display = "none";
+}
+
+function salirPagina() {
+  alert("Acceso cancelado. Saliendo de la página.");
+  window.location.href = "https://www.google.com";
+}
+
+document.getElementById("cancelarLogin").addEventListener("click", () => {
+  salirPagina();
+});
+
+document.getElementById("aceptarLogin").addEventListener("click", () => {
+  const usuario = document.getElementById("usuarioLogin").value.trim();
+  const password = document.getElementById("passwordLogin").value.trim();
+  const error = document.getElementById("errorLogin");
+  error.style.display = "none";
+  error.textContent = "";
+  if (!usuario || !password) {
+    error.textContent = "Por favor, introduce usuario y contraseña.";
+    error.style.display = "block";
+    return;
+  }
+  if (usuario.toLowerCase() === "jtcp" && password === "JTCP1") {
+    guardarSesion("admin");
+    inicializarApp("admin");
+  } else {
+    error.textContent = "Usuario o contraseña incorrectos.";
+    error.style.display = "block";
+  }
+});
+
+document.getElementById("entrarInvitado").addEventListener("click", () => {
+  guardarSesion("guest");
+  inicializarApp("guest");
+});
+
+function guardarSesion(rol) {
+  localStorage.setItem("userRol", rol);
+}
+
+function obtenerSesion() {
+  return localStorage.getItem("userRol");
+}
+
+function cerrarSesion() {
+  localStorage.removeItem("userRol");
+  location.reload();
+}
+
+function inicializarApp(rol) {
+  ocultarLogin();
+  mostrarBotonesSegunRol(rol);
+  cargarTertulias();
+
+  if (!document.getElementById("btnCerrarSesion")) {
+    const btnCerrar = document.createElement("button");
+    btnCerrar.textContent = "Cerrar sesión";
+    btnCerrar.className = "button";
+    btnCerrar.id = "btnCerrarSesion";
+    btnCerrar.addEventListener("click", cerrarSesion);
+
+    // Añadir el botón al contenedor dentro del main
+    const contenedor = document.getElementById("contenedorCerrarSesion");
+    if (contenedor) contenedor.appendChild(btnCerrar);
+  }
+}
+
+/* ---------- CARGA TERTULIAS ---------- */
+async function cargarTertulias(){
+  try {
+    const res = await fetch(GAS_URL_TERTULIAS + "?action=listar");
+    const json = await res.json();
+    const cont = document.getElementById("tabla-container");
+    const mensaje = document.getElementById("mensaje");
+    const archive = document.querySelector(".archive");
+    if(!Array.isArray(json) || json.length===0){
+      mensaje.textContent = "No hay tertulias registradas.";
+      cont.innerHTML = "";
+      archive.innerHTML = "";
+      return;
+    }
+    json.sort((a,b) => new Date(a.fecha) - new Date(b.fecha));
+    cont.innerHTML = "";
+    archive.innerHTML = "";
+    const today = new Date(); today.setHours(0,0,0,0);
+const tarjetasContainer = document.createElement("div");
+tarjetasContainer.className = "tertulia-flex-container";
+json.forEach((t, index) => {
+  const fecha = new Date(t.fecha);
+  const fechaStr = fecha.toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
+  const rol = obtenerSesion();
+  let botonBorrar = "";
+  if (rol === "admin" && fecha >= today) {
+    botonBorrar = ` <button onclick="borrarTertulia(${index + 2})" style="margin-left:6px; background:#dc3545; color:white; border:none; border-radius:3px; padding:2px 6px; cursor:pointer;">🗑</button>`;
+  }
+  if(fecha >= today){
+    const card = document.createElement("div");
+    card.className = "tertulia-card";
+    card.innerHTML = `
+      <div class="titulo">${escapeHtml(t.ponente || "")}${t.tema ? ' — <span class="tema">' + escapeHtml(t.tema) + '</span>' : ''}</div>
+      <div class="fecha">Fecha: ${fechaStr}</div>
+      <button class="ver-mas" onclick="mostrarFoto('${t.foto}')">(click para más datos)</button>
+      ${botonBorrar}
+    `;
+    tarjetasContainer.appendChild(card);
+  } else {
+    // No toques el bloque de archivo
+    const liArchive = document.createElement("li");
+    liArchive.innerHTML = `${fechaStr} · ${escapeHtml(t.tema)}`;
+    archive.appendChild(liArchive);
+  }
+});
+cont.appendChild(tarjetasContainer);
+mensaje.textContent = ''; // Limpia el mensaje "Cargando tertulias..."
+
+    mensaje.textContent = `Próximas tertulias: ${upcomingUl.children.length}`;
+  } catch(err){ console.error("Error en cargarTertulias:", err);}
+}
+
+function escapeHtml(str) { if(!str) return ""; return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"'").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+/* ---------- MODAL AÑADIR TERTULIA ---------- */
+const modal = document.getElementById("modalTertulia");
+document.getElementById("btnAbrirModal").addEventListener("click",()=>modal.style.display="flex");
+document.getElementById("cancelarTertulia").addEventListener("click",()=>{
+  modal.style.display="none";
+  document.getElementById("input-tema").value="";
+  document.getElementById("input-fecha").value="";
+  document.getElementById("input-foto").value="";
+});
+window.addEventListener("click",(e)=>{
+  if(e.target===modal){
+    modal.style.display="none";
+    document.getElementById("input-tema").value="";
+    document.getElementById("input-fecha").value="";
+    document.getElementById("input-foto").value="";
+  }
+});
+
+document.getElementById("confirmarTertulia").addEventListener("click", () => {
+  const loadingDiv = document.getElementById("loadingTertulia");
+  loadingDiv.style.display = "block"; // Mostrar mensaje de carga
+
+  setTimeout(() => {
+    const tema = document.getElementById("input-tema").value.trim();
+    const fecha = document.getElementById("input-fecha").value;
+    const fotoFile = document.getElementById("input-foto").files[0];
+
+    if(!tema || !fecha){
+      alert("Debes completar ambos campos: Tema y Fecha.");
+      loadingDiv.style.display = "none";
+      return;
+    }
+
+    async function enviarTertulia(formData){
+      try{
+        const res = await fetch(GAS_URL_TERTULIAS,{method:"POST",body:formData});
+        const data = await res.json();
+        if(data.status === "OK"){
+          alert("Tertulia añadida correctamente.");
+          modal.style.display = "none";
+          document.getElementById("input-tema").value="";
+          document.getElementById("input-fecha").value="";
+          document.getElementById("input-foto").value="";
+          cargarTertulias();
+        }else{
+          alert("Error: "+data.message);
+        }
+      }catch(err){
+        console.error(err);
+        alert("Error enviando datos al servidor.");
+      }finally{
+        loadingDiv.style.display = "none";
+      }
+    }
+
+    if(fotoFile){
+      const reader = new FileReader();
+      reader.onload = function(e){
+        const base64String = e.target.result;
+        const formData = new FormData();
+        formData.append("action","añadir");
+        formData.append("tema", tema);
+        formData.append("fecha", fecha);
+        formData.append("fotoBase64", base64String);
+        enviarTertulia(formData);
+      };
+      reader.readAsDataURL(fotoFile);
+    }else{
+      const formData = new FormData();
+      formData.append("action","añadir");
+      formData.append("fecha", fecha);
+      formData.append("tema", tema);
+      enviarTertulia(formData);
+    }
+  },50);
+});
+
+/* ---------- BORRAR TERTULIA ---------- */
+async function borrarTertulia(fila) {
+  if (!confirm("¿Estás seguro de que deseas borrar esta tertulia?.")) return;
+
+  const formData = new FormData();
+  formData.append("action", "borrar");
+  formData.append("fila", fila);
+
+  try {
+    const res = await fetch(GAS_URL_TERTULIAS, { method: "POST", body: formData });
+    const data = await res.json();
+    if (data.status === "OK") {
+      alert("Tertulia eliminada correctamente.");
+      cargarTertulias();
+    } else {
+      alert("Error al borrar tertulia: " + data.message);
+    }
+  } catch(err) {
+    console.error("Error al borrar tertulia:", err);
+    alert("Error al comunicar con el servidor.");
+  }
+}
+
+/* ---------- MODAL AÑADIR FOTOS ---------- */
+const modalFotos=document.getElementById("modalFotos");
+document.getElementById("btnAñadirFoto").addEventListener("click",()=>{modalFotos.style.display="flex";});
+document.getElementById("cancelarFotos").addEventListener("click",()=>{
+  modalFotos.style.display="none";
+  document.getElementById("input-fotos").value="";
+});
+window.addEventListener("click",(e)=>{
+  if(e.target===modalFotos){
+    modalFotos.style.display="none";
+    document.getElementById("input-fotos").value="";
+  }
+});
+
+document.getElementById("confirmarFotos").addEventListener("click", async () => {
+  const loadingDiv = document.getElementById("loadingFotos");
+  loadingDiv.style.display = "block"; // Mostrar mensaje de carga
+
+  const files = document.getElementById("input-fotos").files;
+  if(!files || files.length === 0){
+    alert("Selecciona al menos una foto.");
+    loadingDiv.style.display = "none";
+    return;
+  }
+
+  for(let i=0; i < files.length; i++){
+    const file = files[i];
+    try{
+      await subirArchivoComoBase64(file);
+      console.log(`Foto ${i+1}/${files.length} subida.`);
+    }catch(err){
+      console.error("Error subiendo archivo:", err);
+      alert("Se produjo un error subiendo una de las fotos. Revisa la consola.");
+    }
+  }
+  alert("Subida finalizada.");
+  modalFotos.style.display = "none";
+  document.getElementById("input-fotos").value="";
+  loadingDiv.style.display = "none"; // Ocultar mensaje de carga
+});
+
+function subirArchivoComoBase64(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async function(e){
+      const base64String = e.target.result;
+      const formData = new FormData();
+      formData.append("action","subirFoto");
+      formData.append("fotoBase64", base64String);
+      try{
+        const res = await fetch(GAS_URL_TERTULIAS,{method:"POST",body:formData});
+        const data = await res.json();
+        if(data.status === "OK"){
+          resolve(data);
+        }else{
+          reject(new Error(data.message || "Error en respuesta del servidor"));
+        }
+      }catch(err){
+        reject(err);
+      }
+    };
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ---------- VISUALIZACIÓN DE IMÁGENES ---------- */
+function mostrarFoto(url){
+  if(!url){
+    alert("Esta tertulia no tiene foto asociada.");
+    return;
+  }
+  window.open(url, "_blank");
+}
+
+function abrirModalFoto(url){
+  const mf = document.getElementById("modalFoto");
+  const imagen = document.getElementById("imagenModal");
+  imagen.src = url || "";
+  mf.style.display = "flex";
+}
+
+function cerrarModalFoto(){
+  const mf = document.getElementById("modalFoto");
+  mf.style.display = "none";
+  document.getElementById("imagenModal").src = "";
+}
+
+/* ---------- BOTÓN GALERÍA ---------- */
+document.getElementById("btnGaleria").addEventListener("click", ()=>{
+  window.open("galeria.html", "_blank");
+});
+
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').then(registration => {
+      console.log('ServiceWorker registrado con alcance:', registration.scope);
+      registration.onupdatefound = () => {
+        const newWorker = registration.installing;
+        newWorker.onstatechange = () => {
+          if (newWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              // Nueva versión disponible
+              if (confirm("Actualización disponible. ¿Quieres aplicarla ahora?")) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+              }
+            }
+          }
+        };
+      };
+    }).catch(error => {
+      console.error('Error registrando Service Worker:', error);
+    });
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  });
+}
+</script>
+<div id="versionApp" style="
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: 0.8em;
+    color: var(--color-primario);
+    background: var(--color-secundario);
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    opacity: 0.9;
+    z-index: 1000;
+">
+  Versión v1.0.2
+</div>
+<!-- Contenedor del aviso de instalación -->
+<div id="installPrompt" style="
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: #2c3e50;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: none;
+    z-index: 10000;
+    align-items: center;
+">
+  <span>Instala la app Ateneo Realsitiense</span>
+  <button id="btnInstall" style="
+      margin-left: 10px;
+      background: #c0392b;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+  ">Instalar</button>
+</div>
+<script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installDiv = document.getElementById('installPrompt');
+  if (installDiv) installDiv.style.display = 'flex';
+});
+
+document.getElementById('btnInstall').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log('Resultado de la instalación:', outcome);
+
+  const installDiv = document.getElementById('installPrompt');
+  if (installDiv) installDiv.style.display = 'none';
+  deferredPrompt = null;
+});
+
+window.addEventListener('appinstalled', () => {
+  console.log('La PWA ha sido instalada');
+  const installDiv = document.getElementById('installPrompt');
+  if (installDiv) installDiv.style.display = 'none';
+});
+</script>
+</body>
+</html>
