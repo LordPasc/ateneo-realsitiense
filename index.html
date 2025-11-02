@@ -202,56 +202,6 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   align-items: start;
 }
 
-/* === TABLA Y BOTONES TERTULIAS === */
-
-.tabla-wrapper {
-  margin-top: 20px;
-  overflow-x: auto;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  background: #fff;
-}
-
-#tabla-tertulias {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  font-family: 'Segoe UI', sans-serif;
-  min-width: 500px;
-}
-
-#tabla-tertulias th, #tabla-tertulias td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #ddd;
-}
-
-#tabla-tertulias th {
-  background-color: #4caf50;
-  color: white;
-  font-weight: 600;
-}
-
-#tabla-tertulias tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-#tabla-tertulias tr:hover {
-  background-color: #f1f8e9;
-}
-
-#tabla-tertulias img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-.botones-tertulias {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
 
 /* === TARJETAS TERTULIAS (CORRECCIÓN ESPACIO BLANCO) === */
 .tertulia-flex-container {
@@ -267,12 +217,12 @@ footer a:hover { text-decoration: underline; color: var(--color-acento); }
   box-shadow: 0 4px 14px rgba(44,62,80,0.09);
   border: 1.5px solid #eee;
   padding: 18px 22px 18px 18px;
-  min-width: 260px;
-  max-width: 360px;
+  min-width: 160px;
+  max-width: 160px;
   flex: 1 1 260px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   /* Eliminamos el margin-bottom para reducir el espacio */
   margin-bottom: 0; 
   /* Agregamos min-height para que todas se vean uniformes, pero bajo control */
